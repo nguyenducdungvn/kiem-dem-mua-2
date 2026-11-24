@@ -5,7 +5,7 @@
 ## 1. Trạng thái
 - **Repo:** https://github.com/nguyenducdungvn/kiem-dem-mua-2 (nhánh `main`). **Tên miền:** https://kiemdem2.hlvsuckhoe.com/ (file `CNAME` có sẵn; tác giả cần bật GitHub Pages, xem mục 6).
 - **Đã xong:** tách engine dùng chung (mục 2), menu mùa, Mã hồ sơ Mùa 1, **Tập 1 · Bãi Bồi · Màn 1 · Con nước**: 40 cảnh, 5 luật, 14 manh mối, 6 kết thúc, 2 mini-game, 4 không gian 3D. `check.js`: 9.575 trạng thái, 0 lỗi.
-- **Chưa làm:** Tập 1 Màn 2 · Nước ròng, Màn 3 · Bàn giao; ảnh OG; Issue “Đăng ký nhận tập mới” (điền `subscribe.issueUrl` trong `config.js`); Cloudflare Web Analytics (khi có token thì thêm thẻ beacon cuối `index.html` và câu miễn trừ về thống kê); Mùa 1 bản 1.2 (Mã hồ sơ, xem `docs/ma-ho-so-mua-1.md`).
+- **Chưa làm:** Tập 1 Màn 2 · Nước ròng, Màn 3 · Bàn giao; ảnh OG; Cloudflare Web Analytics (khi có token thì thêm thẻ beacon cuối `index.html` và câu miễn trừ về thống kê); Mùa 1 bản 1.2 (Mã hồ sơ, xem `docs/ma-ho-so-mua-1.md`).
 
 ## 2. Cấu trúc file
 | File | Vai trò |
@@ -56,5 +56,5 @@
 ## 6. Việc tác giả cần làm sau lần đẩy đầu tiên
 1. Repo → Settings → Pages: Source `Deploy from a branch`, nhánh `main`, thư mục `/ (root)`.
 2. Custom domain: `kiemdem2.hlvsuckhoe.com`. Đợi chứng chỉ xong thì tick **Enforce HTTPS**.
-3. Tạo Issue “Đăng ký nhận tập mới” rồi gửi đường dẫn cho Claude (điền `subscribe.issueUrl`).
+3. ✓ Đã có Issue #1 “Đăng ký nhận tập mới” (đã điền `subscribe.issueUrl`). Mỗi khi ra màn hoặc tập mới, viết một bình luận trong Issue này để người theo dõi nhận email.
 4. Nếu muốn thống kê: thêm site trong Cloudflare Web Analytics, gửi token.

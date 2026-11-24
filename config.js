@@ -17,7 +17,7 @@ window.GAME_CONFIG = {
   },
 
   subscribe: {
-    issueUrl: '',                    // Tạo Issue "Đăng ký nhận tập mới" rồi dán đường dẫn vào đây
+    issueUrl: 'https://github.com/nguyenducdungvn/kiem-dem-mua-2/issues/1',   // Issue "Đăng ký nhận tập mới" (bấm Subscribe để nhận thông báo)
     links: [
       // { label: 'Trang Facebook', url: 'https://facebook.com/...' },
       // { label: 'Nhóm Zalo', url: 'https://zalo.me/g/...' }
