@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kiểm Đếm Ca Đêm · Mùa 2: Phiếu Bàn Giao</title>
+  <meta name="description" content="Một năm sau đêm ở nhà B4, Thục Anh đi kiểm đếm bốn khu đất sắp đổi chủ. Ở cả bốn nơi, cùng một chữ ký lạ trên biên bản cũ: Người giữ sổ. Truyện tương tác kinh dị tâm lý 3D bằng tiếng Việt.">
+  <meta name="theme-color" content="#061014">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kiemdem2.hlvsuckhoe.com/">
+  <meta property="og:title" content="Kiểm Đếm Ca Đêm · Mùa 2: Phiếu Bàn Giao">
+  <meta property="og:description" content="Bàn giao một nơi chốn, chứ không chỉ một con số. Tập 1 · Bãi Bồi: làng ven sông đêm cuối trước khi di dời.">
+  <meta property="og:locale" content="vi_VN">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/be-vietnam-pro-vietnamese-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/noto-serif-vietnamese-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="in-menu loading">
+  <canvas id="world" aria-hidden="true"></canvas>
+  <div id="labels" class="labels" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="fader" class="fader" aria-hidden="true"></div>
+  <div class="loader" aria-live="polite">Đang mở tập…</div>
+
+  <!-- ===== MENU MÙA ===== -->
+  <section id="season" class="season" aria-labelledby="season-title">
+    <div class="season-inner">
+      <p class="kicker">Truyện tương tác kinh dị tâm lý 3D · tiếng Việt</p>
+      <h1 id="season-title">Kiểm Đếm Ca Đêm</h1>
+      <p class="sub">Mùa 2 · Phiếu Bàn Giao</p>
+      <div class="hook">
+        <p>Một năm sau đêm ở nhà B4, Thục Anh về làm kiểm đếm viên của Trung tâm Phát triển quỹ đất tỉnh Hòa Giang. Mẹ cô đã mổ xong và đang khỏe dần. Cô vẫn mang theo cuốn sổ đo cũ, có mấy trang dán kín mà cô chưa bao giờ mở.</p>
+        <p>Bốn khu đất sắp đổi chủ. Bốn ca đêm kiểm đếm cuối cùng. Và ở cả bốn nơi, trên những biên bản cũ, cùng một chữ ký lạ: <i>Người giữ sổ</i>.</p>
+        <p class="q">Bàn giao một nơi chốn, chứ không chỉ một con số.</p>
+      </div>
+      <ol id="episodes" class="episodes"></ol>
+      <div class="mode-row">
+        <button class="toggle btn-story" aria-pressed="false" aria-describedby="story-desc">Chế độ đọc truyện: <b>Tắt</b></button>
+        <span id="story-desc" class="mode-desc">Bật để tắt đồng hồ đếm ngược và không thua vì cạn chỉ số. Hợp với ai muốn đọc thong thả.</span>
+      </div>
+      <nav class="menu-links" aria-label="Thông tin mùa">
+        <button data-open="dlg-profile">Mã hồ sơ Mùa 1 <span id="profile-pill" class="pill">chưa nhập</span></button>
+        <button data-open="dlg-about">Giới thiệu &amp; phiên bản</button>
+        <button data-open="dlg-disclaimer">Miễn trừ</button>
+        <button data-open="dlg-feedback">✍️ Góp ý</button>
+        <button data-open="dlg-subscribe">🔔 Nhận tập mới</button>
+        <button data-open="dlg-coffee">☕ Mời mình cà phê</button>
+      </nav>
+      <p class="foot"><span class="version"></span> · Chưa chơi Mùa 1? <a href="https://kiemdem.hlvsuckhoe.com/" target="_blank" rel="noopener">Nhà B4 ở đây</a>. Mỗi tập là một truyện trọn vẹn, chơi riêng vẫn hiểu.</p>
+    </div>
+  </section>
+
+  <!-- ===== MÀN HÌNH TẬP ===== -->
+  <section id="menu" class="menu" aria-labelledby="menu-title">
+    <div class="menu-inner">
+      <button id="btn-season" class="back">← Các tập của Mùa 2</button>
+      <p class="kicker" id="menu-kicker"></p>
+      <h1 id="menu-title"></h1>
+      <p class="sub" id="menu-sub"></p>
+      <div class="hook" id="menu-hook"></div>
+      <ul class="facts" id="menu-facts"></ul>
+      <div class="menu-actions">
+        <button id="btn-continue" class="cta ghost" hidden>Tiếp tục ca trực</button>
+        <button id="btn-start" class="cta">Bắt đầu ca trực</button>
+      </div>
+      <div class="mode-row">
+        <button class="toggle btn-story" aria-pressed="false">Chế độ đọc truyện: <b>Tắt</b></button>
+        <span class="mode-desc">Không đồng hồ đếm ngược, chỉ số không làm bạn thua.</span>
+      </div>
+      <nav class="menu-links" aria-label="Thông tin tập">
+        <button data-open="dlg-chapters">Chọn màn</button>
+        <button data-open="dlg-endings">Bộ sưu tập kết thúc <span id="endings-count" class="pill">0</span></button>
+        <button data-open="dlg-about">Giới thiệu &amp; phiên bản</button>
+        <button data-open="dlg-feedback">✍️ Góp ý</button>
+        <button data-open="dlg-coffee">☕ Mời mình cà phê</button>
+      </nav>
+      <p class="foot"><span class="ep-version"></span> · Nên đeo tai nghe · Di chuột để soi đèn pin</p>
+    </div>
+  </section>
+
+  <!-- ===== HUD ===== -->
+  <header class="hud">
+    <div class="brand">
+      <strong id="brand-title">Kiểm Đếm Ca Đêm</strong>
+      <span id="game-act"></span>
+    </div>
+    <div class="stats" id="stats" aria-label="Chỉ số"></div>
+    <div class="tools">
+      <span class="clock" id="clock">--:--</span>
+      <button id="btn-journal" class="tool">Sổ tay <span class="badge" id="journal-count">0</span></button>
+      <button id="btn-hide" class="tool" aria-pressed="false">Xem cảnh</button>
+      <button id="btn-audio" class="tool" aria-pressed="true">♪ Bật</button>
+      <button id="btn-menu" class="tool" aria-label="Màn hình tập">☰</button>
+    </div>
+  </header>
+
+  <div id="location" class="location" aria-live="polite"></div>
+
+  <main id="stage" class="stage">
+    <div class="scene-head">
+      <span id="scene-time" class="scene-time"></span>
+      <h2 id="scene-title"></h2>
+    </div>
+    <div id="text" class="text"></div>
+    <div id="puzzle"></div>
+    <div id="timer" class="timer" hidden><div class="timer-track"><div id="timer-bar" class="timer-bar"></div></div><span id="timer-label"></span></div>
+    <nav id="choices" class="choices" aria-label="Lựa chọn"></nav>
+  </main>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <!-- ===== HỘP THOẠI ===== -->
+  <dialog id="journal" class="paper">
+    <h2 id="journal-title">Sổ tay</h2>
+    <h3 id="journal-rules-title">Luật</h3>
+    <p class="muted small" id="journal-note"></p>
+    <ul id="journal-rules" class="rules"></ul>
+    <h3>Manh mối</h3>
+    <ul id="journal-clues" class="clues"></ul>
+    <h3 hidden>Sổ đo của Thục Anh</h3>
+    <ul id="journal-pages" class="pages"></ul>
+    <button class="close choice"><span class="ct">Đóng sổ</span></button>
+  </dialog>
+
+  <dialog id="dlg-endings" class="paper">
+    <h2>Bộ sưu tập kết thúc</h2>
+    <p class="muted small">Mỗi kết thúc là một truyện ngắn. Gợi ý bên dưới giúp bạn tìm những kết thúc còn khóa.</p>
+    <ul id="endings-grid" class="endings"></ul>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <dialog id="dlg-profile" class="paper">
+    <h2>Mã hồ sơ Mùa 1</h2>
+    <p>Đi hết Mùa 1 (bản 1.2 trở lên), màn cuối sẽ hiện một <b>Mã hồ sơ</b> gồm 6 ký tự. Nhập mã ở đây để Thục Anh nhớ lại những gì bạn đã chọn ở nhà B4: vài câu thoại và manh mối trong Mùa 2 sẽ khác đi.</p>
+    <div class="profile-row">
+      <label for="profile-input" class="sr">Mã hồ sơ</label>
+      <input id="profile-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="9" placeholder="Ví dụ 7KQ-2MD">
+      <button type="button" id="profile-ok" class="tool">Nhận mã</button>
+      <button type="button" id="profile-clear" class="tool" hidden>Xóa mã</button>
+    </div>
+    <div id="profile-state"></div>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <dialog id="dlg-about" class="paper">
+    <h2>Giới thiệu</h2>
+    <p><b>Kiểm Đếm Ca Đêm · Mùa 2: Phiếu Bàn Giao</b> là tuyển tập truyện tương tác kinh dị tâm lý. Mỗi tập là một khu đất sắp đổi chủ và một ca đêm kiểm đếm cuối cùng. Bạn vào vai Thục Anh, kiểm đếm viên của Trung tâm Phát triển quỹ đất tỉnh Hòa Giang (tỉnh hư cấu). Vũ khí của bạn là bản đồ, thước đo và khả năng đọc kỹ từng lời dặn.</p>
+    <p>Câu hỏi của mùa: <i>ai đang ký thay những người đã đi?</i></p>
+    <h3>Cách chơi</h3>
+    <ul>
+      <li>Đọc lời kể, chọn A/B/C. Một số nút có đồng hồ đếm ngược.</li>
+      <li>Mở <b>Sổ tay</b> để xem luật đã thu và manh mối. Luật càng nhiều nơi cùng ghi thì càng đáng tin. Luật không rõ nguồn thì nên nghi.</li>
+      <li>Tỉnh táo, Tin cậy, Độ neo dùng chung cả mùa. Mỗi tập có thêm một chỉ số riêng (Tập 1: Mực nước).</li>
+      <li>Nút <b>Xem cảnh</b> ẩn chữ để ngắm bối cảnh. Di chuột để soi đèn pin.</li>
+      <li><b>Chế độ đọc truyện</b>: không có đồng hồ đếm ngược, chỉ số không làm bạn thua.</li>
+      <li><b>Phím tắt:</b> 1–4 hoặc A–D để chọn · Space/Enter hiện hết chữ · J mở sổ tay · H ẩn chữ · M bật/tắt âm thanh.</li>
+    </ul>
+    <h3>Phiên bản <span class="version"></span></h3>
+    <ul class="changelog">
+      <li><b>v2.0.0-alpha.1 · 24/11/2026</b>: Tách engine dùng chung cho cả mùa (chỉ số riêng theo tập, Mã hồ sơ Mùa 1, menu chọn tập). Tập 1 · Bãi Bồi, Màn 1 · Con nước: bảng con nước, giao hội từ ba cây gạo, 6 kết thúc.</li>
+    </ul>
+    <h3>Lộ trình</h3>
+    <p>Tập 1 · Bãi Bồi (đang viết: Màn 1 ✓) → Tập 2 · Chợ Sớm → Tập 3 · Ca Ba → Tập 4 · Con Dấu.</p>
+    <h3>Ghi công</h3>
+    <p class="small"><span class="author-line">Tác giả: <span class="author"></span>. </span>Kịch bản và lập trình thực hiện cùng Claude (Anthropic). Đồ họa 3D: Three.js (giấy phép MIT). Font: Be Vietnam Pro, Noto Serif, Roboto Mono (giấy phép SIL OFL).</p>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <dialog id="dlg-disclaimer" class="paper">
+    <h2>Miễn trừ</h2>
+    <ul>
+      <li><b>Hư cấu.</b> Mọi nhân vật, địa danh (tỉnh Hòa Giang, làng Cồn Lở) và sự kiện trong game đều do tưởng tượng. Mọi sự trùng hợp với người, nơi chốn hay sự việc có thật đều là ngẫu nhiên.</li>
+      <li><b>Không nhằm đánh giá chính sách.</b> Bối cảnh lấy cảm hứng từ chuyện sạt lở bờ sông, di dời dân cư và sắp xếp lại đơn vị hành chính. Game không nhằm phản ánh, đánh giá hay công kích bất kỳ cá nhân, tổ chức, cơ quan hay chính sách nào.</li>
+      <li><b>Không phải tư vấn pháp lý hay kỹ thuật.</b> Các chi tiết về đo đạc, con nước, bồi thường đã được đơn giản hóa để phục vụ cốt truyện. Đừng dùng bảng con nước trong game để đi sông thật.</li>
+      <li><b>Nội dung.</b> Kinh dị tâm lý, không máu me. Có yếu tố sông nước, mất mát và giằng xé đạo đức. Khuyến nghị người chơi từ 13 tuổi.</li>
+      <li><b>Dữ liệu.</b> Tiến trình chơi, bộ sưu tập kết thúc và Mã hồ sơ chỉ được lưu trong trình duyệt của bạn. Góp ý chỉ được gửi đi khi chính bạn bấm nút gửi.</li>
+      <li><b>Bản quyền.</b> Nội dung truyện thuộc về tác giả. Thư viện và font dùng theo giấy phép ghi ở mục Giới thiệu.</li>
+    </ul>
+    <button class="close choice"><span class="ct">Đã hiểu</span></button>
+  </dialog>
+
+  <dialog id="dlg-coffee" class="paper">
+    <h2>☕ Mời mình một ly cà phê</h2>
+    <p><b>Cảm ơn bạn đã đọc!</b> Game miễn phí và sẽ luôn miễn phí.</p>
+    <div id="coffee-body"></div>
+    <p class="small muted">Chia sẻ game cho bạn bè cũng là một cách ủng hộ rất lớn. <button id="btn-share" class="tool">Chép đường dẫn</button></p>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <dialog id="dlg-chapters" class="paper">
+    <h2>Chọn màn</h2>
+    <p class="muted small">Màn nào bạn đã tới thì mở. Chơi từ một màn sẽ dùng lại các lựa chọn bạn đã có lúc bước vào màn ấy.</p>
+    <ul id="chapters-list" class="chapters"></ul>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <dialog id="dlg-feedback" class="paper">
+    <h2>✍️ Góp ý cho tác giả</h2>
+    <p class="small">Mỗi nhận xét đều được đọc, và giúp các tập sau hay hơn.</p>
+    <form id="fb-form" class="fb" onsubmit="return false">
+      <fieldset class="stars" aria-label="Chấm điểm">
+        <legend>Bạn chấm câu chuyện mấy sao?</legend>
+        <div id="fb-stars" role="radiogroup"></div>
+      </fieldset>
+      <label>Nhân vật bạn nhớ nhất
+        <select id="fb-char"><option value="">(chọn)</option></select>
+      </label>
+      <label>Đoạn làm bạn nhớ nhất
+        <input id="fb-moment" type="text" maxlength="200" placeholder="Ví dụ: bảng con nước, ba cây gạo, ngọn đèn bờ bên kia…">
+      </label>
+      <label>Điều nên cải thiện, hoặc ý tưởng cho tập sau
+        <textarea id="fb-text" rows="4" maxlength="1500" placeholder="Viết thoải mái…"></textarea>
+      </label>
+      <label class="check"><input id="fb-sub" type="checkbox"> Tôi muốn nhận tập tiếp theo</label>
+      <p class="warn small">Góp ý gửi qua GitHub sẽ hiển thị công khai. Đừng ghi số điện thoại hay địa chỉ.</p>
+      <div class="fb-actions" id="fb-actions"></div>
+    </form>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <dialog id="dlg-subscribe" class="paper">
+    <h2>🔔 Nhận tập tiếp theo</h2>
+    <p>Mùa 2 ra mắt từng tập. Để không lỡ tập mới:</p>
+    <ol class="sub-list" id="sub-list"></ol>
+    <button class="close choice"><span class="ct">Đóng</span></button>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="engine/ma-ho-so.js"></script>
+  <script src="engine/icons.js"></script>
+  <script src="engine/audio.js"></script>
+  <script src="engine/core.js"></script>
+</body>
+</html>

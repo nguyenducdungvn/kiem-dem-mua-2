@@ -1,0 +1,21 @@
+name: "🐞 Báo lỗi kỹ thuật"
+description: Game không chạy, chữ hiển thị sai, nút không bấm được…
+title: "[Lỗi] "
+labels: ["loi"]
+body:
+  - type: input
+    id: thiet-bi
+    attributes:
+      label: Thiết bị và trình duyệt
+      placeholder: "Ví dụ: iPhone 13, Safari / Windows 11, Chrome"
+  - type: input
+    id: canh
+    attributes:
+      label: Lỗi xảy ra ở tập, màn hoặc cảnh nào?
+  - type: textarea
+    id: mo-ta
+    attributes:
+      label: Mô tả lỗi
+      description: Nếu được, đính kèm ảnh chụp màn hình.
+    validations:
+      required: true

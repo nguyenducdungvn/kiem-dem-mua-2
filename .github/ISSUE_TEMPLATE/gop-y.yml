@@ -1,0 +1,30 @@
+name: "✍️ Góp ý, nhận xét"
+description: Chia sẻ cảm nhận, báo lỗi chữ, hoặc gợi ý cho các tập sau của Kiểm Đếm Ca Đêm · Mùa 2.
+title: "[Góp ý] "
+labels: ["gop-y"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã chơi **Kiểm Đếm Ca Đêm · Mùa 2: Phiếu Bàn Giao**! Góp ý ở đây sẽ hiển thị công khai, vì vậy bạn đừng ghi số điện thoại hay địa chỉ nhé.
+  - type: dropdown
+    id: diem
+    attributes:
+      label: Bạn chấm câu chuyện mấy sao?
+      options: ["★★★★★ (5)", "★★★★☆ (4)", "★★★☆☆ (3)", "★★☆☆☆ (2)", "★☆☆☆☆ (1)"]
+  - type: input
+    id: nho-nhat
+    attributes:
+      label: Đoạn hoặc nhân vật bạn nhớ nhất
+  - type: textarea
+    id: gop-y
+    attributes:
+      label: Điều nên cải thiện, hoặc ý tưởng cho tập sau
+    validations:
+      required: true
+  - type: checkboxes
+    id: nhan-tin
+    attributes:
+      label: Nhận câu chuyện tiếp theo
+      options:
+        - label: Tôi muốn được báo khi có tập mới (tác giả sẽ trả lời ngay trong góp ý này)
