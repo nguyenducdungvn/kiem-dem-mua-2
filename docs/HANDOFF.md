@@ -6,7 +6,7 @@
 - **Repo:** https://github.com/nguyenducdungvn/kiem-dem-mua-2 (nhánh `main`). **Tên miền:** https://kiemdem2.hlvsuckhoe.com/ (file `CNAME` có sẵn; tác giả cần bật GitHub Pages, xem mục 6).
 - **Đã xong:** engine dùng chung (mục 2), menu mùa, Mã hồ sơ Mùa 1, **Tập 1 · Bãi Bồi trọn bộ 3 màn** (v2.0.0): 93 cảnh, 8 luật, 28 manh mối, 10 kết thúc (4 kết màn, 6 thất bại, tất cả tới được), 4 mini-game, 5 không gian 3D. `check.js`: 2.927.587 trạng thái, 0 lỗi (có Mã hồ sơ: 3,1 triệu; chế độ đọc truyện: 2,1 triệu; đều 0 lỗi).
 - **Kịch bản và bảng tổng hợp từng màn:** `docs/tap-1/kich-ban-man-1.md`, `kich-ban-man-2.md`, `kich-ban-man-3.md` (có bảng tổng hợp cả tập); toàn văn `kich-ban-tap-1-xuat.md`.
-- **Chưa làm:** Tập 2 · Chợ Sớm (bước tiếp theo); ảnh OG; Mùa 1 bản 1.2 (Mã hồ sơ, xem `docs/ma-ho-so-mua-1.md`). Tác giả tạo Release `v2.0.0` bằng tay.
+- **Chưa làm:** Tập 2 · Chợ Sớm (bước tiếp theo, kế hoạch dựng đã chốt ở `docs/tap-2/ke-hoach-tap-2.md`, Project: `claude/kiem-dem-mua-2-tap-2.md`); ảnh OG; Mùa 1 bản 1.2 (Mã hồ sơ, xem `docs/ma-ho-so-mua-1.md`). Tác giả tạo Release `v2.0.0` bằng tay.
 
 ## 2. Cấu trúc file
 | File | Vai trò |
