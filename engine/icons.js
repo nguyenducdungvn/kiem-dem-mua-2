@@ -22,6 +22,8 @@
     lamp: `<g ${S}><path d="M24 20h16l4 22H20z"/><path d="M28 14h8M32 8v6M24 42v6h16v-6"/><path d="M8 30l6 2M56 30l-6 2M10 18l6 5M54 18l-6 5"/></g>`,
     tree: `<g ${S}><path d="M32 58V30M32 40l-10-8M32 36l10-10M32 30l-6-12M32 30l8-14"/><circle cx="20" cy="30" r="3"/><circle cx="44" cy="24" r="3"/><circle cx="26" cy="16" r="3"/><circle cx="40" cy="14" r="3"/></g>`,
     bell: `<g ${S}><path d="M20 44c0-14 2-26 12-26s12 12 12 26z"/><path d="M14 44h36M32 18v-6M28 50a4 4 0 0 0 8 0"/></g>`,
+    bowl: `<g ${S}><path d="M8 30h48a24 24 0 0 1-48 0z"/><path d="M20 54h24"/><path d="M24 22c0-4 4-4 4-8M32 22c0-4 4-4 4-8M40 22c0-4 4-4 4-8"/></g>`,
+    pen: `<g ${S}><path d="M44 8l12 12-30 30-16 4 4-16z"/><path d="M38 14l12 12M14 38l12 12"/><path d="M8 58c6-4 10 2 16-2"/></g>`,
     roof: `<g ${S}><path d="M6 34L32 16l26 18"/><path d="M12 30v6M52 30v6"/><path d="M4 46c8-4 14-4 20 0s14 4 20 0 12-4 16 0M4 56c8-4 14-4 20 0s14 4 20 0 12-4 16 0"/></g>`
   };
   function EndingIcon(id, map) {

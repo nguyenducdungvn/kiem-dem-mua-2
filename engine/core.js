@@ -398,7 +398,7 @@
         <p class="teaser"><b>${sc.nextScene ? 'Tiếp theo' : 'Sắp ra mắt'}, ${esc(sc.next)}:</b> ${esc(sc.teaser || '')}</p>
         <div class="thanks">
           <h3>Cảm ơn bạn đã đọc đến đây</h3>
-          <p>Mỗi lựa chọn của bạn đêm nay sẽ theo bạn sang các màn sau. ${sc.nextScene ? '' : 'Màn tiếp theo đang được viết. '}Còn ${allClues.size - S.clues.length} manh mối và ${STORY.endingsList.length - got} kết thúc bạn chưa thấy, chơi lại để tìm nhé.</p>
+          <p>${sc.final ? 'Mỗi lựa chọn của bạn đêm nay đã làm nên cái kết này. Tập tiếp theo đang được viết. ' : 'Mỗi lựa chọn của bạn đêm nay sẽ theo bạn sang các màn sau. ' + (sc.nextScene ? '' : 'Màn tiếp theo đang được viết. ')}Còn ${allClues.size - S.clues.length} manh mối và ${STORY.endingsList.length - got} kết thúc bạn chưa thấy, chơi lại để tìm nhé.</p>
           <p>Nếu thấy hay, bạn có thể mời mình một ly cà phê để mình có thêm động lực viết tiếp.</p>
           ${(CFG.coffee && CFG.coffee.qr) ? `<button class="qr-thumb" id="qr-thumb" aria-label="Mở mã QR mời cà phê"><img src="${esc(CFG.coffee.qr)}" alt="Mã QR mời cà phê"><span>Quét mã để mời cà phê${CFG.author ? ' · ' + esc(CFG.author) : ''}</span></button>` : ''}
         </div>
@@ -420,7 +420,7 @@
       return;
     }
     if (sc.nextScene) {
-      const nb = btn('Sang ' + sc.next + ' ▶', () => { checkpoint = clone(S); go(sc.nextScene); });
+      const nb = btn('Sang ' + sc.next + ' ▶', () => { checkpoint = clone(S); proceedTo(sc.nextScene); });
       nb.classList.add('primary'); box.append(nb);
     } else {
       const sb = btn('🔔 Báo cho tôi khi có ' + sc.next, () => openDialog('dlg-subscribe'));

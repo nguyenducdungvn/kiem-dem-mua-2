@@ -3,7 +3,7 @@
    Để trống trường nào thì phần đó tự ẩn.
    ========================================================= */
 window.GAME_CONFIG = {
-  version: '2.0.0-alpha.1',          // Phiên bản của cả mùa (tag v2.0.0 khi Tập 1 hoàn chỉnh)
+  version: '2.0.0',                  // Phiên bản của cả mùa: v2.0.0 = Tập 1 trọn bộ, mỗi tập sau là một bản minor
   author: 'Nguyễn Đức Dũng',
   contact: '',
   gameUrl: 'https://kiemdem2.hlvsuckhoe.com/',
@@ -44,8 +44,8 @@ window.GAME_CONFIG = {
       {
         n: 1, name: 'Bãi Bồi', status: 'open',
         blurb: 'Làng Cồn Lở đêm cuối trước khi di dời. Đất đi theo con nước, và cọc mốc cắm ban ngày thì đêm trôi mất.',
-        facts: 'Màn 1 · khoảng 15 phút',
-        scripts: ['engine/vendor/three.min.js', 'engine/scene3d-kit.js', 'tap-1/story-act1.js', 'tap-1/scene.js']
+        facts: 'Trọn tập · 3 màn · khoảng 40 phút',
+        scripts: ['engine/vendor/three.min.js', 'engine/scene3d-kit.js', 'tap-1/story-act1.js', 'tap-1/story-act2.js', 'tap-1/story-act3.js', 'tap-1/scene.js']
       },
       { n: 2, name: 'Chợ Sớm', status: 'soon', blurb: 'Chợ cũ của thị trấn sắp thành trung tâm thương mại. Từ 3 giờ sáng, chợ ma dọn hàng và đòi bán cho bạn bằng lời hứa.' },
       { n: 3, name: 'Ca Ba', status: 'soon', blurb: 'Nhà máy dệt cũ chuyển thành khu đô thị. Tiếng máy vẫn chạy ca ba, và sổ giao ca tự viết thêm dòng mới.' },

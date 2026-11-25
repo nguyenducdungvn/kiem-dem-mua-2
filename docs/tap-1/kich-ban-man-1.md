@@ -1,7 +1,7 @@
 # Kiểm Đếm Ca Đêm · Mùa 2 · Tập 1: Bãi Bồi
 ## Màn 1: Con nước (bản dựng v2.0.0-alpha.1)
 
-> Toàn văn kịch bản xuất tự động nằm ở `kich-ban-man-1-xuat.md` (`node tools/export.js tap-1/story-act1.js`). File này ghi quy trình Bước A/B/C và bảng tổng hợp cuối màn.
+> Toàn văn kịch bản cả tập xuất tự động nằm ở `kich-ban-tap-1-xuat.md` (`node tools/export.js tap-1/story-act1.js tap-1/story-act2.js tap-1/story-act3.js`). File này ghi quy trình Bước A/B/C và bảng tổng hợp cuối màn.
 
 ---
 

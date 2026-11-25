@@ -715,13 +715,16 @@ STORY.scenes = {
   t1_giua_dong: {
     type: 'ending',
     title: 'Giữa dòng',
-    text: [
-      'Bạn nhảy xuống xuồng, cầm mái chèo thứ hai. Chiếc xuồng có đèn bão ở rất gần, chỉ mười nhát chèo. Rồi hai mươi. Rồi năm mươi.',
-      'Khi bạn ngoái lại, cả làng Cồn Lở đã tắt đèn. Chỉ còn một ngọn đèn ở bến bên kia đang sáng lại, và nó cũng ở sau lưng bạn.',
-      'Người đội nón lá đã ở ngay mũi xuồng. Họ đưa bạn mái chèo của họ, như trao ca trực. Dưới nón không có mặt người, chỉ có ngọn đèn.',
-      'Sáng hôm sau, người ta thấy chiếc xuồng của điểm trường mắc trên ngọn cây gạo Đầu bến, cách mặt nước bốn mét. Trong xuồng có cuốn sổ đo mở ở trang cuối: “Mực nước lúc 23:10: không đo được, vì tôi đang ở dưới nó.”',
-      'Từ đó, đêm nào nước đứng, người làng bên kia sông lại thấy hai ngọn đèn bão giữa dòng.'
-    ]
+    text: (s) => {
+      const m3 = /Màn 3/.test(s.act || '');
+      return [
+        m3 ? 'Bạn nhảy xuống đò cùng bà Tư, cầm mái chèo thứ hai. Chiếc xuồng có đèn bão ở rất gần, chỉ mười nhát chèo. Rồi hai mươi. Rồi năm mươi.' : 'Bạn nhảy xuống xuồng, cầm mái chèo thứ hai. Chiếc xuồng có đèn bão ở rất gần, chỉ mười nhát chèo. Rồi hai mươi. Rồi năm mươi.',
+        'Khi bạn ngoái lại, cả làng Cồn Lở đã tắt đèn. Chỉ còn một ngọn đèn ở bến bên kia đang sáng lại, và nó cũng ở sau lưng bạn.',
+        'Người đội nón lá đã ở ngay mũi xuồng. Họ đưa bạn mái chèo của họ, như trao ca trực. Dưới nón không có mặt người, chỉ có ngọn đèn.',
+        `Sáng hôm sau, người ta thấy ${m3 ? 'chiếc đò của bà Tư' : 'chiếc xuồng của điểm trường'} mắc trên ngọn cây gạo Đầu bến, cách mặt nước bốn mét. Trong đó có cuốn sổ đo mở ở trang cuối: “Mực nước lúc ${s.time || '23:10'}: không đo được, vì tôi đang ở dưới nó.”`,
+        'Từ đó, đêm nào nước đứng, người làng bên kia sông lại thấy hai ngọn đèn bão giữa dòng.'
+      ];
+    }
   },
 
   t1_nuoc_len: {

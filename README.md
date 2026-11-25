@@ -8,8 +8,8 @@ Một năm sau đêm ở nhà B4, Thục Anh về làm kiểm đếm viên của
 
 | Tập | Tên | Trạng thái |
 |---|---|---|
-| 1 | Bãi Bồi: làng ven sông đêm cuối trước khi di dời, đất đi theo con nước | Đang viết · Màn 1 ✓ |
-| 2 | Chợ Sớm | Sắp ra mắt |
+| 1 | Bãi Bồi: làng ven sông đêm cuối trước khi di dời, đất đi theo con nước | Trọn bộ 3 màn ✓ (v2.0.0) |
+| 2 | Chợ Sớm | Đang viết |
 | 3 | Ca Ba | Sắp ra mắt |
 | 4 | Con Dấu | Sắp ra mắt |
 
@@ -26,10 +26,11 @@ python3 -m http.server 8000
 
 ## Kiểm tra truyện
 ```
-node tools/check.js tap-1/story-act1.js                          # duyệt mọi nhánh
-node tools/check.js tap-1/story-act1.js --profile=m1_ghi_su_that # giả lập Mã hồ sơ Mùa 1
-node tools/check.js tap-1/story-act1.js --story                  # chế độ đọc truyện
-node tools/export.js tap-1/story-act1.js > docs/tap-1/kich-ban-man-1-xuat.md
+T1="tap-1/story-act1.js tap-1/story-act2.js tap-1/story-act3.js"
+node tools/check.js $T1                           # duyệt mọi nhánh (khoảng 3 triệu trạng thái, dưới 20 giây)
+node tools/check.js $T1 --profile=m1_ghi_su_that  # giả lập Mã hồ sơ Mùa 1
+node tools/check.js $T1 --story                   # chế độ đọc truyện
+node tools/export.js $T1 > docs/tap-1/kich-ban-tap-1-xuat.md
 ```
 
 ## Cấu trúc

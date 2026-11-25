@@ -160,6 +160,24 @@
     for (let i = 0; i < 9; i++) { const b = glowBall(K, 0xffb050, 0.12); b.position.set(-30 + i * 7 + Math.sin(i) * 2, -1.6, -18 - (i % 3) * 8); under.add(b); }
     under.visible = false; g.add(under);
     const dst = K.dust(300, 30, 6); dst.position.set(0, 0, 4); g.add(dst);
+    // Màn 2: năm cây sào cắm từ bờ ra ngôi nhà, tia laser của anh Quý
+    const poles = new T.Group();
+    [[-6.2, -3.5], [-6.8, -8.5], [-7.4, -13.5], [-7.9, -18.5], [-8.4, -24.5]].forEach(([x, z], i) => {
+      const p = K.at(new T.Mesh(new T.CylinderGeometry(0.035, 0.04, 4.2, 6), K.M(0x8a6a32, { roughness: 0.8 })), x, 0, z);
+      p.rotation.z = (i % 2 ? 0.04 : -0.03); p.userData.base = i; poles.add(p);
+      const tag = K.at(K.box(0.12, 0.05, 0.02, K.M(0x6a2fa0, { emissive: 0x2a0a40 })), x, 0, z + 0.04); tag.userData.tag = true; tag.userData.base = i; poles.add(tag);
+    });
+    poles.visible = false; g.add(poles);
+    const laser = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 1, 6), new T.MeshBasicMaterial({ color: 0xff2020, transparent: true, opacity: 0.85, fog: false }));
+    laser.visible = false; g.add(laser);
+    const laserFrom = new T.Vector3(1.4, 1.3, 2.4), laserTo = new T.Vector3(-14, 2.2, -45);
+    laser.position.copy(laserFrom).add(laserTo).multiplyScalar(0.5);
+    laser.scale.y = laserFrom.distanceTo(laserTo);
+    laser.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), laserTo.clone().sub(laserFrom).normalize());
+    // Màn 3: bình minh
+    const sun = K.at(glowBall(K, 0xffb070, 3.2), -30, -2, -150); sun.visible = false; g.add(sun);
+    const sunLight = new T.DirectionalLight(0xffc49a, 0); sunLight.position.set(-30, 10, -100); g.add(sunLight);
+    const NIGHT = new T.Color(0x061014), DAWN = new T.Color(0xb88a78), GREY = new T.Color(0x5d646c), tmpC = new T.Color();
 
     const CAMS = {
       base: { pos: [0.6, 1.75, 8.5], look: [-0.5, 0.7, -6], orbit: 0.03 },
@@ -167,7 +185,10 @@
       school: { pos: [-9, 2.2, 11], look: [-2, 0.4, -22], orbit: 0.02 },
       trees: { pos: [6, 3, 22], look: [-6, 4, 4], orbit: 0.02 },
       ebb: { pos: [2.5, 2.2, 8.5], look: [-6, 1.2, -20], orbit: 0.02 },
-      wide: { pos: [8, 6, 22], look: [-3, 1, -14], orbit: 0.04 }
+      wide: { pos: [8, 6, 22], look: [-3, 1, -14], orbit: 0.04 },
+      at_house: { pos: [-1.5, 1.4, -9], look: [-8, 1.6, -21], orbit: 0.01 },
+      tu: { pos: [4.2, 1.5, 1.6], look: [2.2, 1.0, -1.8], orbit: 0.008 },
+      ghost: { pos: [1.2, 1.9, 7.5], look: [-2, 0.6, -26], orbit: 0.015 }
     };
     const view = {
       group: g, fog: [0x061014, 0.024], amb: 0.32,
@@ -179,7 +200,12 @@
       },
       onShow() {
         const fx = K.fx;
-        const c = fx.has('wide') ? CAMS.wide : fx.has('closeup_sau') ? CAMS.sau : fx.has('from_school') ? CAMS.school : fx.has('trees') ? CAMS.trees : fx.has('house') ? CAMS.ebb : CAMS.base;
+        const c = fx.has('wide') ? CAMS.wide : fx.has('at_house') ? CAMS.at_house : fx.has('close_tu') ? CAMS.tu : fx.has('ghost_wait') || fx.has('ghost_leave') ? CAMS.ghost : fx.has('closeup_sau') ? CAMS.sau : fx.has('from_school') ? CAMS.school : fx.has('trees') ? CAMS.trees : fx.has('house') ? CAMS.ebb : CAMS.base;
+        // Màn 2: đò đậu sát bậc thềm ngôi nhà, bà Tư và anh Sáu trên đò
+        if (fx.has('at_house')) { ferry.position.x = -5.2; ferry.position.z = -17.5; ferry.rotation.y = 0.2; const tu = K.figures.tu, sa = K.figures.sau; if (tu) { tu.position.set(-5.0, 0, -18.6); tu.rotation.y = 0.6; } if (sa) { sa.position.set(-5.4, 0, -16.6); sa.rotation.y = 2.4; } }
+        else { ferry.position.x = 2.8; ferry.position.z = -1.8; ferry.rotation.y = 1.25; }
+        if (fx.has('ghost_wait') || fx.has('ghost_leave')) { const tu = K.figures.tu, sa = K.figures.sau, l = K.figures.lanh; if (tu) tu.rotation.y = Math.PI + 0.2; if (sa) { sa.position.set(0.4, 0, 2.6); sa.rotation.y = Math.PI - 0.2; } if (l) { l.position.set(-1.8, 0, 2.2); l.rotation.y = Math.PI + 0.3; } }
+        if (fx.has('dawn') || fx.has('dawn_grey')) { const q = K.figures.quy, l = K.figures.lanh, sa = K.figures.sau; if (q) { q.position.set(3.4, 0, 3.6); q.rotation.y = Math.PI + 0.4; } if (l) { l.position.set(-0.6, 0, 1.6); l.rotation.y = Math.PI; } if (sa) { sa.position.set(1.0, 0, 1.2); sa.rotation.y = Math.PI + 0.2; } }
         Object.assign(view.cam, c);
         if (fx.has('from_school')) { const l = K.figures.lanh; if (l) { l.position.set(-6, 0, 6); l.rotation.y = 2.6; } }
         if (fx.has('tu_wade')) { const tu = K.figures.tu; if (tu) { tu.position.set(-6.5, -0.9, -6); tu.rotation.y = 0.4; } }
@@ -189,7 +215,7 @@
       update(t, dt) {
         const fx = K.fx, el = t - K.fxStart;
         const mn = typeof K.S.MN === 'number' ? K.S.MN : 2;
-        let wy = -0.75 + mn * 0.05 - (fx.has('ebb') ? 0.55 : 0);
+        let wy = -0.75 + mn * 0.05 - (fx.has('ebb') ? 0.55 : 0) + (fx.has('rise') ? 0.3 : 0);
         if (fx.has('flood')) wy = -0.4 + Math.min(1.8, el * 0.22);
         water.position.y += (wy - water.position.y) * Math.min(1, dt * 0.8);
         const still = fx.has('still');
@@ -214,18 +240,24 @@
         // xuồng ma
         ghost.visible = ghostOn;
         if (ghostOn) {
+          ghost.position.z = fx.has('ghost_leave') ? -26 - Math.min(70, Math.max(0, el - 1) * 7) : -26;
+          ghost.position.x = fx.has('ghost_leave') ? -2 + Math.min(12, Math.max(0, el - 1) * 1.2) : -2;
           const sink = fx.has('sinking') ? Math.min(3, Math.max(0, el - 1.2) * 0.6) : 0;
           ghost.position.y = water.position.y + 0.15 + Math.sin(t * 1.2) * 0.05 - sink;
           ghost.rotation.z = Math.sin(t * 0.9) * 0.04;
-          gl.intensity = (1.4 + Math.sin(t * 9) * 0.2) * (sink > 2.2 ? 0 : 1);
-          gf.rotation.y = Math.sin(t * 0.5) * 0.3;
-          gf.userData.armR.rotation.x = fx.has('sinking') ? 0 : -2.2 + Math.sin(t * 3) * 0.5;
+          const leaveFade = fx.has('ghost_leave') ? Math.max(0, 1 - Math.max(0, el - 9) / 2) : 1;
+          gl.intensity = (1.4 + Math.sin(t * 9) * 0.2) * (sink > 2.2 ? 0 : 1) * leaveFade;
+          gf.rotation.y = fx.has('ghost_leave') ? Math.PI : Math.sin(t * 0.5) * 0.3;
+          const waiting = fx.has('ghost_wait') || fx.has('ghost_leave') || fx.has('sinking');
+          gf.userData.armR.rotation.x = waiting ? -0.5 + Math.sin(t * 1.2) * 0.3 : -2.2 + Math.sin(t * 3) * 0.5;
         }
         // nhà hiện lúc nước ròng
         const showHouse = fx.has('house');
-        const hy = showHouse ? Math.min(0, -5 + Math.max(0, el - 0.5) * 1.1) + water.position.y + 0.3 : -6;
+        let hy = showHouse ? Math.min(0, -5 + Math.max(0, el - 0.5) * 1.1) + water.position.y + 0.3 : -6;
+        if (showHouse && fx.has('house_sink')) hy = water.position.y + 0.3 - Math.min(6, Math.max(0, el - 1.5) * 0.45);
+        if (showHouse && (fx.has('at_house') || fx.has('house_day'))) hy = water.position.y + 0.3;
         house.position.y += (hy - house.position.y) * Math.min(1, dt * (showHouse ? 3 : 1));
-        const hlamp = house.userData.lamp, dark = fx.has('house_dark');
+        const hlamp = house.userData.lamp, dark = fx.has('house_dark') || (fx.has('house_flicker') && el > 0.6 && el < 3.5) || (fx.has('house_sink') && el > 9);
         if (hlamp) hlamp.intensity = dark ? 0 : 0.9 + Math.sin(t * 7) * 0.12 + (Math.random() < 0.01 ? -0.6 : 0);
         house.userData.win.material.emissiveIntensity = dark ? 0.05 : 1.4;
         under.visible = fx.has('underlights');
@@ -238,6 +270,24 @@
         const tu = K.figures.tu;
         if (tu && tu.visible && !fx.has('tu_wade')) tu.position.y = ferry.position.y + 0.18;
         if (tu && tu.visible && fx.has('tu_wade')) tu.position.y = water.position.y - 0.55;
+        const sa = K.figures.sau;
+        if (sa && sa.visible && fx.has('at_house')) sa.position.y = ferry.position.y + 0.18;
+        // sào và laser
+        poles.visible = fx.has('pole');
+        poles.children.forEach((p) => {
+          const sinkP = fx.has('pole_sink') && p.userData.base === 4 ? Math.min(1.6, el * 0.18) : 0;
+          p.position.y = p.userData.tag ? water.position.y + 1.1 - sinkP : water.position.y + 0.6 - sinkP;
+        });
+        laser.visible = fx.has('laser') && Math.sin(t * 30) > -0.6;
+        // bình minh
+        const dawnOn = fx.has('dawn') || fx.has('dawn_grey');
+        const dk = dawnOn ? Math.min(1, el / 9) : 0;
+        tmpC.copy(NIGHT).lerp(fx.has('dawn_grey') ? GREY : DAWN, dk);
+        K.scene.background.copy(tmpC); if (K.scene.fog) { K.scene.fog.color.copy(tmpC); K.scene.fog.density = 0.024 - dk * 0.012; }
+        K.ambient.intensity = 0.32 + dk * (fx.has('dawn_grey') ? 0.35 : 0.6);
+        sun.visible = fx.has('dawn'); sun.position.y = -2 + dk * 9;
+        sunLight.intensity = fx.has('dawn') ? dk * 1.1 : fx.has('dawn_grey') ? dk * 0.3 : 0;
+        moonDisc.visible = !dawnOn; moonPath.visible = !dawnOn;
       }
     };
     return view;
@@ -266,10 +316,12 @@
     const gf = K.figure({ name: '', shirt: 0x3a3a36, pants: 0x1a1a1a, nonla: true, stoop: true, lantern: true }); gf.position.set(0, 0.2, 0); ghost.add(gf);
     ghost.add(K.at(new T.PointLight(0xffa040, 1.6, 12, 1.6), 0, 1.4, 0.6));
     ghost.position.set(0.6, 0, -6); ghost.rotation.y = Math.PI; ghost.visible = false; g.add(ghost);
+    const aheadHouse = stiltHouse(K, { lit: true, wall: 0x5c4a36, tin: 0x5f6a6a }); aheadHouse.scale.setScalar(1.35);
+    aheadHouse.position.set(3.4, -0.5, -15); aheadHouse.rotation.y = -0.5; aheadHouse.visible = false; g.add(aheadHouse);
     return {
       group: g, fog: [0x061014, 0.02], amb: 0.3, sway: 0.006,
       cam: { pos: [0, 1.35, 2.1], look: [0, 1.0, -8], orbit: 0.005 },
-      spots: { tu: [0, 0.22, -1.7, 0] },
+      spots: { tu: [0, 0.22, -1.7, 0], sau: [-0.62, 0.22, -0.9, Math.PI - 0.3] },
       update(t) {
         const fx = K.fx;
         water.userData.ripple(t, 0.07, 0.0006);
@@ -285,6 +337,14 @@
         farLamp.visible = fx.has('farlamp') || fx.has('village_dark');
         ghost.visible = fx.has('ghostboat');
         if (ghost.visible) ghost.position.y = Math.sin(t * 1.2) * 0.05;
+        aheadHouse.visible = fx.has('house_ahead');
+        if (aheadHouse.visible) {
+          const dk = fx.has('house_dark');
+          if (aheadHouse.userData.lamp) aheadHouse.userData.lamp.intensity = dk ? 0 : 0.9 + Math.sin(t * 7) * 0.1;
+          aheadHouse.userData.win.material.emissiveIntensity = dk ? 0.05 : 1.4;
+        }
+        const sa = K.figures.sau;
+        if (sa && sa.visible) sa.position.y = 0.22 + hull.position.y;
       }
     };
   }
@@ -375,12 +435,151 @@
     const lamp = K.at(new T.PointLight(0xffb050, 1.4, 4, 1.6), -0.5, 1.2, -0.6); g.add(lamp);
     const glass = K.at(new T.Mesh(new T.CylinderGeometry(0.06, 0.08, 0.2, 12), K.M(0xffd38a, { emissive: 0xffa040, emissiveIntensity: 1.2, transparent: true, opacity: 0.8 })), -0.5, 0.92, -0.6); g.add(glass);
     const tide = K.at(new T.Mesh(new T.PlaneGeometry(0.6, 0.8), K.M(0xe8dcbc, { roughness: 1 })), 1.0, 1.6, -D / 2 + 0.02); g.add(tide);
+    // Màn 3: cây bút mực tím không ai mang tới
+    const pen = new T.Group();
+    pen.add(K.at(new T.Mesh(new T.CylinderGeometry(0.009, 0.009, 0.15, 10), K.M(0x2a1a3a, { metalness: 0.5, roughness: 0.3 })), 0, 0, 0));
+    const nib = K.at(new T.Mesh(new T.ConeGeometry(0.009, 0.025, 10), K.M(0x6a2fa0, { emissive: 0x6a2fa0, emissiveIntensity: 1.2 })), 0, -0.087, 0); pen.add(nib);
+    pen.rotation.z = Math.PI / 2; pen.rotation.y = 0.5; pen.position.set(0.36, 0.82, -0.25); pen.visible = false; g.add(pen);
+    const penLight = K.at(new T.PointLight(0x9a5aff, 0, 1.4, 2), 0.36, 0.9, -0.25); g.add(penLight);
+    // hai tờ giấy thêm: sổ ông Tư (bìa xanh) và bảng con nước 2007
+    const docs = new T.Group();
+    const book = K.at(K.box(0.2, 0.02, 0.28, K.M(0x2f4f7a, { roughness: 0.8 })), -0.38, 0.825, -0.25); book.rotation.y = -0.2; docs.add(book);
+    const sheet = K.at(new T.Mesh(new T.PlaneGeometry(0.3, 0.42), K.M(0xe8dcbc, { roughness: 1 })), 0.5, 0.816, -0.55); sheet.rotation.x = -Math.PI / 2; sheet.rotation.z = -0.15; docs.add(sheet);
+    docs.visible = false; g.add(docs);
+    // cửa sổ: trời sáng dần
+    const win = K.windowFrame(0.8, 0.7); win.position.set(-W / 2 + 0.02, 1.55, -0.6); win.rotation.y = Math.PI / 2; g.add(win);
+    const winGlow = K.at(new T.Mesh(new T.PlaneGeometry(0.75, 0.65), new T.MeshBasicMaterial({ color: 0x0a1620 })), -W / 2 + 0.01, 1.55, -0.6); winGlow.rotation.y = Math.PI / 2; g.add(winGlow);
+    const NIGHTW = new T.Color(0x0a1620), DAWNW = new T.Color(0xd8a080);
     return {
       group: g, fog: [0x0a0806, 0.08], amb: 0.16,
       cam: { pos: [0.15, 1.75, 0.75], look: [0.05, 0.75, -0.45], orbit: 0.004 },
       spots: { quy: [0.9, 0, -1.15, -0.4] },
-      update(t) { lamp.intensity = 1.3 + Math.sin(t * 8) * 0.08 + (Math.random() < 0.01 ? -0.6 : 0); }
+      update(t) {
+        const fx = K.fx, el = t - K.fxStart;
+        lamp.intensity = 1.3 + Math.sin(t * 8) * 0.08 + (Math.random() < 0.01 ? -0.6 : 0);
+        pen.visible = fx.has('pen'); docs.visible = fx.has('docs');
+        const dead = fx.has('pen_dead');
+        nib.material.emissiveIntensity = dead ? 0 : 1.2;
+        nib.material.color.setHex(dead ? 0x3a3a3a : 0x6a2fa0);
+        penLight.intensity = fx.has('pen_glow') && !dead ? 0.5 + Math.sin(t * 2.2) * 0.35 : 0;
+        if (fx.has('pen_roll')) pen.position.x = 0.36 - Math.min(0.3, el * 0.12); else pen.position.x = 0.36;
+        pen.rotation.x = fx.has('pen_roll') ? -Math.min(0.3, el * 0.12) * 20 : 0;
+        winGlow.material.color.copy(NIGHTW).lerp(DAWNW, fx.has('dawn_window') ? Math.min(0.7, el / 12) : 0);
+      }
     };
+  }
+
+
+  /* ================= TRONG NGÔI NHÀ GIỮA SÔNG ================= */
+  function plankTex(K, base) {
+    return K.canvasTex(256, 256, (c, w, h) => {
+      c.fillStyle = base; c.fillRect(0, 0, w, h);
+      const r = K.rnd(12);
+      for (let x = 0; x < w; x += 32) { c.fillStyle = `rgba(0,0,0,${0.15 + r() * 0.15})`; c.fillRect(x, 0, 2, h); for (let i = 0; i < 6; i++) { c.fillStyle = `rgba(40,25,10,${r() * 0.25})`; c.fillRect(x + 4 + r() * 24, r() * h, 1, 20 + r() * 60); } }
+    }, [3, 1]);
+  }
+  function marksTex(K) {
+    return K.canvasTex(256, 1024, (c, w, h) => {
+      c.fillStyle = '#6a4a2c'; c.fillRect(0, 0, w, h);
+      const r = K.rnd(31);
+      for (let i = 0; i < 40; i++) { c.fillStyle = `rgba(30,18,8,${r() * 0.3})`; c.fillRect(r() * w, 0, 1.5, h); }
+      // vạch đo chiều cao của anh Sáu: y tính theo mét (cao 2,2 m = 1024 px)
+      [[1.05, 'Sáu, 5 tuổi'], [1.24, 'Sáu, 8 tuổi'], [1.40, 'Sáu, 11 tuổi'], [1.58, 'Sáu, 14 tuổi, Tết 2007']].forEach(([m, label]) => {
+        const y = h - (m / 2.2) * h;
+        c.strokeStyle = '#d8c8a0'; c.lineWidth = 4; c.beginPath(); c.moveTo(20, y); c.lineTo(150, y); c.stroke();
+        c.fillStyle = '#e8dcbc'; c.font = `500 22px ${K.FONT}`; c.fillText(label, 24, y - 8);
+      });
+    });
+  }
+  function purpleTex(K) {
+    return K.canvasTex(512, 384, (c, w, h) => {
+      c.clearRect(0, 0, w, h);
+      c.fillStyle = 'rgba(150,80,220,0.95)'; c.textAlign = 'center';
+      c.font = `italic 600 34px ${K.FONT}`;
+      c.fillText('Còn thiếu 62,4 m².', w / 2, 110);
+      c.fillText('Đo cho đủ rồi hẵng về.', w / 2, 170);
+      c.font = `italic 600 30px ${K.FONT}`; c.fillText('Người giữ sổ', w / 2, 290);
+      c.strokeStyle = 'rgba(150,80,220,0.9)'; c.lineWidth = 3; c.beginPath(); c.moveTo(150, 310); c.bezierCurveTo(200, 280, 300, 340, 360, 300); c.stroke();
+    });
+  }
+  function buildNha(K) {
+    const W = 5.2, D = 4.6, H = 2.8;
+    const g = new T.Group();
+    const floor = new T.Mesh(new T.PlaneGeometry(W, D), K.M(0x4a3a28, { roughness: 1 })); floor.rotation.x = -Math.PI / 2; g.add(floor);
+    const wallM = K.M(0xffffff, { map: plankTex(K, '#5a4028') });
+    [[0, -D / 2, 0, W], [0, D / 2, Math.PI, W], [-W / 2, 0, Math.PI / 2, D], [W / 2, 0, -Math.PI / 2, D]].forEach(([x, z, ry, w]) => { const m = new T.Mesh(new T.PlaneGeometry(w, H), wallM); m.position.set(x, H / 2, z); m.rotation.y = ry; g.add(m); });
+    const ceil = new T.Mesh(new T.PlaneGeometry(W, D), K.M(0x3a3430, { metalness: 0.4, roughness: 0.6 })); ceil.rotation.x = Math.PI / 2; ceil.position.y = H; g.add(ceil);
+    // bộ ván và mâm cơm
+    const wood = K.M(0x6b4a2c, { roughness: 0.8 });
+    g.add(K.at(K.box(1.9, 0.08, 1.2, wood), 0.2, 0.45, -0.9));
+    [[-0.7, -1.4], [1.1, -1.4], [-0.7, -0.4], [1.1, -0.4]].forEach(([x, z]) => g.add(K.at(K.box(0.08, 0.45, 0.08, wood), x, 0.22, z)));
+    g.add(K.at(new T.Mesh(new T.CylinderGeometry(0.42, 0.42, 0.03, 24), K.M(0x8a5a2a, { metalness: 0.3 })), 0.2, 0.505, -0.9));
+    const bowlM = K.M(0xe8e4d8, { roughness: 0.4 });
+    [[-0.05, -0.75], [0.35, -0.68], [0.2, -1.12]].forEach(([x, z]) => { g.add(K.at(new T.Mesh(new T.CylinderGeometry(0.06, 0.04, 0.05, 14), bowlM), x, 0.545, z)); g.add(K.at(new T.Mesh(new T.SphereGeometry(0.05, 10, 6, 0, Math.PI * 2, 0, Math.PI / 2), K.M(0xf6f2e8)), x, 0.56, z)); });
+    g.add(K.at(new T.Mesh(new T.CylinderGeometry(0.1, 0.09, 0.06, 16), K.M(0x5a3a1a)), 0.05, 0.55, -0.95));
+    g.add(K.at(new T.Mesh(new T.CylinderGeometry(0.11, 0.1, 0.07, 16), K.M(0xd8d4c8)), 0.38, 0.555, -0.98));
+    const pot = K.at(new T.Mesh(new T.CylinderGeometry(0.16, 0.14, 0.2, 18), K.M(0x2a2a2a, { metalness: 0.6 })), 1.0, 0.6, -0.9); g.add(pot);
+    // hơi cơm
+    const steamGeo = new T.BufferGeometry(); const sp = []; for (let i = 0; i < 60; i++) sp.push(0.2 + (Math.random() - 0.5) * 0.5, 0.6 + Math.random() * 0.8, -0.9 + (Math.random() - 0.5) * 0.4);
+    steamGeo.setAttribute('position', new T.Float32BufferAttribute(sp, 3));
+    const steam = new T.Points(steamGeo, new T.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.35, depthWrite: false })); g.add(steam);
+    // đèn dầu
+    const lamp = K.at(new T.PointLight(0xffa850, 1.5, 7, 1.6), -0.4, 0.8, -0.9); g.add(lamp);
+    g.add(K.at(new T.Mesh(new T.CylinderGeometry(0.05, 0.07, 0.16, 12), K.M(0xffd38a, { emissive: 0xffa040, emissiveIntensity: 1.3, transparent: true, opacity: 0.85 })), -0.4, 0.58, -1.2));
+    // tấm màn bếp, ánh lửa phía sau
+    const curtain = K.at(new T.Mesh(new T.PlaneGeometry(1.1, 1.9), K.M(0x8a3a2a, { transparent: true, opacity: 0.82, side: T.DoubleSide })), 1.6, 0.95, -D / 2 + 0.05); g.add(curtain);
+    const fire = K.at(new T.PointLight(0xff7a30, 0, 4, 1.8), 1.6, 0.6, -D / 2 - 0.4); g.add(fire);
+    const fireGlow = K.at(new T.Mesh(new T.PlaneGeometry(1.05, 1.85), new T.MeshBasicMaterial({ color: 0xff7a30, transparent: true, opacity: 0 })), 1.6, 0.95, -D / 2 + 0.03); g.add(fireGlow);
+    // khung cửa buồng có vạch đo chiều cao
+    const frame = K.at(new T.Mesh(new T.PlaneGeometry(0.25, 2.2), K.M(0xffffff, { map: marksTex(K) })), -W / 2 + 0.03, 1.1, 0.6); frame.rotation.y = Math.PI / 2; g.add(frame);
+    g.add(K.at(K.box(0.06, 2.2, 1.0, K.M(0x1a120a)), -W / 2 + 0.02, 1.1, 1.2));
+    // tủ thờ
+    g.add(K.at(K.box(1.0, 1.1, 0.4, K.M(0x4a2a18, { roughness: 0.6 })), -1.5, 0.55, -D / 2 + 0.22));
+    g.add(K.at(new T.Mesh(new T.CylinderGeometry(0.07, 0.06, 0.08, 14), K.M(0x9a8a5a, { metalness: 0.5 })), -1.5, 1.14, -D / 2 + 0.22));
+    const soOngTu = K.at(K.box(0.18, 0.02, 0.24, K.M(0x2f4f7a)), -1.25, 1.11, -D / 2 + 0.25); g.add(soOngTu);
+    const altarLight = K.at(new T.PointLight(0xffb070, 0, 2.2, 2), -1.5, 1.5, -D / 2 + 0.6); g.add(altarLight);
+    // cửa chính và chữ mực tím
+    const door = K.at(new T.Mesh(new T.PlaneGeometry(1.1, 2.0), K.M(0x4a3420, { roughness: 0.9 })), 0.6, 1.0, D / 2 - 0.03); door.rotation.y = Math.PI; g.add(door);
+    const purpleMat = new T.MeshBasicMaterial({ map: purpleTex(K), transparent: true, opacity: 0, depthWrite: false });
+    const purple = K.at(new T.Mesh(new T.PlaneGeometry(1.0, 0.75), purpleMat), 0.6, 1.25, D / 2 - 0.05); purple.rotation.y = Math.PI; g.add(purple);
+    // nước tràn vào
+    const water = new T.Mesh(new T.PlaneGeometry(W, D), K.M(0x1a3a44, { transparent: true, opacity: 0.75, roughness: 0.15, metalness: 0.4 }));
+    water.rotation.x = -Math.PI / 2; water.position.y = -0.05; g.add(water);
+    const CAMS = {
+      base: { pos: [1.7, 1.55, 1.7], look: [0.1, 0.7, -0.9], orbit: 0.006 },
+      marks: { pos: [0.9, 1.5, -0.7], look: [-W / 2, 1.3, 0.8], orbit: 0.004 },
+      altar: { pos: [0.4, 1.6, 0.4], look: [-1.4, 1.1, -D / 2], orbit: 0.004 },
+      door: { pos: [0.2, 1.55, -1.2], look: [0.6, 1.2, D / 2], orbit: 0.004 }
+    };
+    const view = {
+      group: g, fog: [0x0c0806, 0.07], amb: 0.2, portraitPull: 1.15,
+      cam: Object.assign({}, CAMS.base),
+      spots: { sau: [-2.0, 0, 1.45, 1.9], tu: [-0.7, 0, -0.2, 2.31] },
+      onShow() {
+        const fx = K.fx;
+        Object.assign(view.cam, fx.has('marks') ? CAMS.marks : fx.has('altar') ? CAMS.altar : fx.has('door') ? CAMS.door : CAMS.base);
+        const tu = K.figures.tu, sa = K.figures.sau;
+        if (fx.has('door')) { if (tu) { tu.position.set(1.15, 0, 1.85); tu.rotation.y = Math.PI + 0.3; } if (sa) { sa.position.set(-0.4, 0, 1.7); sa.rotation.y = Math.PI - 0.3; } }
+        else if (fx.has('altar')) { if (tu) { tu.position.set(-0.6, 0, -1.2); tu.rotation.y = 2.2; } }
+        else if (fx.has('steam') || fx.has('water_in')) { if (sa) { sa.position.set(-1.5, 0, 0.4); sa.rotation.y = 2.29; } if (tu) { tu.position.set(-0.7, 0, -0.2); tu.rotation.y = 2.31; } }
+      },
+      update(t, dt) {
+        const fx = K.fx, el = t - K.fxStart;
+        lamp.intensity = fx.has('lamp') ? 1.4 + Math.sin(t * 7) * 0.1 : 0.3;
+        steam.visible = fx.has('steam');
+        if (steam.visible) { const a = steamGeo.attributes.position.array; for (let i = 1; i < a.length; i += 3) { a[i] += dt * 0.25; if (a[i] > 1.5) a[i] = 0.58; } steamGeo.attributes.position.needsUpdate = true; }
+        const voice = fx.has('voice') ? 1 : fx.has('voice_soft') ? 0.45 : 0;
+        fire.intensity = voice * (1.6 + Math.sin(t * 13) * 0.4 + Math.sin(t * 29) * 0.2);
+        fireGlow.material.opacity = voice * (0.25 + Math.sin(t * 11) * 0.05);
+        altarLight.intensity = fx.has('altar') ? 0.9 + Math.sin(t * 5) * 0.1 : 0;
+        const wantW = fx.has('water_high') ? 0.7 : fx.has('water_in') ? Math.min(0.28, el * 0.03) : -0.05;
+        water.position.y += (wantW - water.position.y) * Math.min(1, dt * 1.5);
+        const wantP = fx.has('purple_door') ? Math.min(1, el / 3) : fx.has('purple_run') ? Math.max(0, 1 - el / 6) : 0;
+        purpleMat.opacity = wantP;
+        if (fx.has('purple_run')) purple.position.y = 1.25 - Math.min(0.6, el * 0.08); else purple.position.y = 1.25;
+      }
+    };
+    return view;
   }
 
   Scene3D.register({
@@ -390,7 +589,8 @@
       ben: { label: 'Bến đò Cồn Lở', build: buildBen },
       song: { label: 'Giữa sông', build: buildSong },
       truong: { label: 'Điểm trường Cồn Lở', build: buildTruong },
-      tram: { label: 'Chòi trạm', build: buildTram }
+      tram: { label: 'Chòi trạm', build: buildTram },
+      nha: { label: 'Ngôi nhà giữa sông', build: buildNha }
     },
     figures: {
       tu: { name: 'Bà Tư', shirt: 0x5a4a6a, pants: 0x1d1d22, hair: 0xb8b2a6, nonla: true, stoop: true, skin: 0xc89670 },

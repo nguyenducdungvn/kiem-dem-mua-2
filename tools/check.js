@@ -44,7 +44,13 @@ const icons = ST.endingIcons || {}; ST.endingsList.forEach((e) => { if (!icons[e
 // 2. mô phỏng có gộp trạng thái
 const clamp = (k, v) => { const c = STATS[k]; let lo = c.min, hi = c.max; if (opt.story && c.story) { if (c.story.min !== undefined) lo = c.story.min; if (c.story.max !== undefined) hi = c.story.max; } return Math.max(lo, Math.min(hi, v)); };
 const statFail = (S) => { if (opt.story) return null; for (const k of KEYS) if (STATS[k].fail && hits(STATS[k].fail, S[k])) return STATS[k].fail.ending; return null; };
-const key = (id, S) => id + '|' + KEYS.map((k) => S[k]).join(',') + '|' + Object.keys(S.flags).filter((f) => S.flags[f]).sort().join('.') + '|' + (S.ends || []).join('.');
+// Chỉ những cờ có mặt trong điều kiện lựa chọn, hướng đi bằng hàm, hay cách chọn kết màn mới làm nhánh khác nhau.
+// Cờ chỉ dùng để đổi lời kể thì không cần tách trạng thái (tránh bùng nổ tổ hợp khi có nhiều màn).
+const BRANCH_FLAGS = new Set();
+const scanFn = (fn) => { if (typeof fn === 'function') (fn.toString().match(/flags\.([A-Za-z0-9_]+)/g) || []).forEach((m) => BRANCH_FLAGS.add(m.slice(6))); };
+Object.values(sc).forEach((x) => { (x.choices || []).concat(x.answers || []).forEach((c) => { scanFn(c.cond); scanFn(c.next); }); scanFn(x.endOf); });
+scanFn(ST.actEndingOf);
+const key = (id, S) => id + '|' + KEYS.map((k) => S[k]).join(',') + '|' + [...BRANCH_FLAGS].filter((f) => S.flags[f]).sort().join('.');
 const visited = new Set(); const endCount = {}; const actEnds = {}; const finals = []; const atActEnd = [];
 const S0 = { flags: { ...profileFlags }, ends: [] }; KEYS.forEach((k) => { S0[k] = STATS[k].start; });
 const stack = [[START, S0]];
@@ -57,7 +63,11 @@ while (stack.length) {
   if (s.type === 'ending') { endCount[id] = (endCount[id] || 0) + 1; continue; }
   if (s.type === 'actend') {
     const e = (s.endOf || ST.actEndingOf)(S); actEnds[e] = (actEnds[e] || 0) + 1; atActEnd.push(S);
-    if (s.nextScene) { stack.push([s.nextScene, { ...S, flags: { ...S.flags }, ends: S.ends.concat(e) }]); continue; }
+    if (s.nextScene) {
+      const T = { ...S, flags: { ...S.flags }, ends: S.ends.concat(e) }, t = sc[s.nextScene];
+      apply(T, t.effects); if (t.flags) Object.assign(T.flags, t.flags);
+      stack.push([s.nextScene, T]); continue;
+    }
     finals.push(S); continue;
   }
   const opts = (s.choices || s.answers || []).filter((c) => !c.cond || c.cond(S)).concat(s.timer && !opt.story ? [{ next: s.timer.next }] : []);
@@ -75,6 +85,7 @@ while (stack.length) {
   }
 }
 const rng = (list, k) => list.reduce((a, S) => [Math.min(a[0], S[k]), Math.max(a[1], S[k])], [999, -999]);
+console.log('Cờ tạo nhánh:', [...BRANCH_FLAGS].join(', '));
 console.log('Trạng thái khác nhau đã duyệt:', states, opt.story ? '(chế độ đọc truyện)' : '', opt.profile ? '(có Mã hồ sơ: ' + opt.profile + ')' : '');
 console.log('Kết thúc chạm tới (số trạng thái):', endCount);
 console.log('Kết màn:', actEnds);
