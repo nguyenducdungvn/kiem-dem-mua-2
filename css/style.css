@@ -356,6 +356,10 @@ body.in-menu .hud, body.in-menu .stage, body.in-menu .location, body.in-menu .la
 .fill.mn { background: linear-gradient(90deg, #3d8fb0, var(--river)); }
 .pins.mn .pin.on { background: var(--river); border-color: var(--river); box-shadow: 0 0 6px rgba(111,195,216,0.5); }
 .stat .num { min-width: 30px; }
+/* Tập 2 · Sổ nợ: thanh hai chiều, vạch giữa là số 0 */
+.fill.sn { background: linear-gradient(90deg, #9a6ad8, #e8c070); }
+.track:has(.fill.sn) { position: relative; }
+.track:has(.fill.sn)::after { content: ''; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; margin-left: -1px; background: #e8e2d4; opacity: 0.8; }
 
 /* Đang nạp tập */
 .loader { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; font: 600 16px/1.6 var(--sans); color: var(--muted); background: var(--bg); }

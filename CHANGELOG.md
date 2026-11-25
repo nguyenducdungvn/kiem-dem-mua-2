@@ -1,5 +1,18 @@
 # Nhật ký phiên bản
 
+## v2.1.0-alpha.1 · 25/11/2026 · Tập 2 · Chợ Sớm · Màn 1
+**Màn 1 · Sổ nợ** (22:00 – 01:00), chơi thử tại `?tap=2` (menu mùa vẫn ghi “Sắp ra mắt”)
+- Mở tập ở phòng hồ sơ Trung tâm: bản chụp sổ nợ có một dòng mực tím. Câu thoại đổi theo kết cuối Tập 1 bạn đã mở.
+- Chỉ số riêng mới: **Sổ nợ**, chạy hai chiều từ −10 đến +10. Đèn trong nhà lồng tắt dần khi Sổ nợ âm.
+- Nút 1 · Sạp 47 còn treo đèn. Mini-game đối chiếu sơ đồ chợ 1998 với sổ thu phí: 186 dòng khớp 186 ô, nhưng chỉ có 184 hộ thật. Nút 3 · ký con số tổng.
+- Bà Hai mở sổ nợ. Lời dặn L1, L2, L3, L4, L6, và L7 (mực tím). Kết thúc mới: Kết Màn 1: Đèn sạp 47, Sạp trống, Giữ lại chợ, Đếm mãi.
+
+**3D:** phòng hồ sơ Trung tâm, nhà lồng chợ (mái tôn, 32 sạp đánh số, cổng có cửa sắt cuốn, 24 bóng đèn tròn, đèn dầu ở dãy cuối đã dỡ), sạp 47 (cân đồng hồ, bóng đèn đung đưa, tự sáng lại), phòng ban quản lý (sơ đồ 1998, sổ thu phí, quạt trần). Nhân vật: bà Hai, anh Toàn, Mi, bà Huệ.
+
+**Âm thanh và hình:** tiếng cân, tiếng rao xa, cửa sắt cuốn, nền chợ đêm. Sáu biểu tượng kết thúc mới.
+
+**Engine:** trạng thái tập `preview`; bảng tổng kết hiển thị đúng chỉ số có định dạng riêng; thanh chỉ số hai chiều có vạch số 0.
+
 ## v2.0.0 · 25/11/2026 · Tập 1 · Bãi Bồi trọn bộ
 **Màn 2 · Nước ròng** (01:10 – 03:30)
 - Chèo ra ngôi nhà giữa sông lúc nước ròng sâu nhất (Mực nước −3).

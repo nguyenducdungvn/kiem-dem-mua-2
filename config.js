@@ -3,7 +3,7 @@
    Để trống trường nào thì phần đó tự ẩn.
    ========================================================= */
 window.GAME_CONFIG = {
-  version: '2.0.0',                  // Phiên bản của cả mùa: v2.0.0 = Tập 1 trọn bộ, mỗi tập sau là một bản minor
+  version: '2.1.0-alpha.1',          // Phiên bản của cả mùa: v2.0.0 = Tập 1 trọn bộ, v2.1.0 = Tập 2 trọn bộ
   author: 'Nguyễn Đức Dũng',
   contact: '',
   gameUrl: 'https://kiemdem2.hlvsuckhoe.com/',
@@ -47,7 +47,14 @@ window.GAME_CONFIG = {
         facts: 'Trọn tập · 3 màn · khoảng 40 phút',
         scripts: ['engine/vendor/three.min.js', 'engine/scene3d-kit.js', 'tap-1/story-act1.js', 'tap-1/story-act2.js', 'tap-1/story-act3.js', 'tap-1/scene.js']
       },
-      { n: 2, name: 'Chợ Sớm', status: 'soon', blurb: 'Chợ cũ của thị trấn sắp thành trung tâm thương mại. Từ 3 giờ sáng, chợ ma dọn hàng và đòi bán cho bạn bằng lời hứa.' },
+      {
+        // 'preview': menu mùa vẫn ghi “Sắp ra mắt”, nhưng mở thẳng ?tap=2 thì chơi được (để tác giả chơi thử từng màn).
+        // Đủ 3 màn thì đổi thành 'open'.
+        n: 2, name: 'Chợ Sớm', status: 'preview',
+        blurb: 'Chợ cũ của thị trấn sắp thành trung tâm thương mại. Từ 3 giờ sáng, chợ ma dọn hàng và đòi bán cho bạn bằng lời hứa.',
+        facts: 'Đang viết · Màn 1/3',
+        scripts: ['engine/vendor/three.min.js', 'engine/scene3d-kit.js', 'tap-2/story-act1.js', 'tap-2/scene.js']
+      },
       { n: 3, name: 'Ca Ba', status: 'soon', blurb: 'Nhà máy dệt cũ chuyển thành khu đô thị. Tiếng máy vẫn chạy ca ba, và sổ giao ca tự viết thêm dòng mới.' },
       { n: 4, name: 'Con Dấu', status: 'soon', blurb: 'Trụ sở xã cũ sau sáp nhập. Con dấu còn hiệu lực đến sáng, và giấy nào được đóng dấu đêm nay sẽ thành sự thật.' }
     ],

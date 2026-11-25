@@ -24,6 +24,13 @@
     bell: `<g ${S}><path d="M20 44c0-14 2-26 12-26s12 12 12 26z"/><path d="M14 44h36M32 18v-6M28 50a4 4 0 0 0 8 0"/></g>`,
     bowl: `<g ${S}><path d="M8 30h48a24 24 0 0 1-48 0z"/><path d="M20 54h24"/><path d="M24 22c0-4 4-4 4-8M32 22c0-4 4-4 4-8M40 22c0-4 4-4 4-8"/></g>`,
     pen: `<g ${S}><path d="M44 8l12 12-30 30-16 4 4-16z"/><path d="M38 14l12 12M14 38l12 12"/><path d="M8 58c6-4 10 2 16-2"/></g>`,
+    // Mùa 2 · Tập 2 · Chợ Sớm
+    bulb: `<g ${S}><path d="M32 4v8"/><path d="M22 30a10 10 0 1 1 20 0c0 6-5 8-5 14H27c0-6-5-8-5-14z"/><path d="M27 50h10M28 56h8"/><path d="M8 28h6M50 28h6M12 14l5 4M52 14l-5 4"/></g>`,
+    stall: `<g ${S}><path d="M6 24h52l-6-12H12z"/><path d="M12 24v32M52 24v32M8 40h48"/><path d="M32 24v4"/><circle cx="32" cy="32" r="3"/></g>`,
+    ledger: `<g ${S}><path d="M8 12h20a4 4 0 0 1 4 4v38a4 4 0 0 0-4-4H8z"/><path d="M56 12H36a4 4 0 0 0-4 4v38a4 4 0 0 1 4-4h20z"/><path d="M14 22h12M14 30h12M14 38h8M38 22h12M38 30h12"/></g>`,
+    tally: `<g ${S}><path d="M10 16v32M18 16v32M26 16v32M34 16v32M6 40l34-20"/><path d="M46 16v32M54 16v32"/></g>`,
+    scale: `<g ${S}><circle cx="32" cy="36" r="16"/><path d="M32 36l7-9"/><path d="M14 56h36M18 18h28M32 18v-8"/></g>`,
+    coin: `<g ${S}><circle cx="24" cy="28" r="14"/><circle cx="40" cy="38" r="14"/><path d="M40 32v12M34 38h12"/></g>`,
     roof: `<g ${S}><path d="M6 34L32 16l26 18"/><path d="M12 30v6M52 30v6"/><path d="M4 46c8-4 14-4 20 0s14 4 20 0 12-4 16 0M4 56c8-4 14-4 20 0s14 4 20 0 12-4 16 0"/></g>`
   };
   function EndingIcon(id, map) {

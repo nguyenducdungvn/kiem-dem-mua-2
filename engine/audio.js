@@ -3,8 +3,9 @@
    SFX.unlock() phải được gọi trong một lần bấm của người chơi.
    SFX.play('loa' | 'loa_click' | 'scrape' | 'scrape_far' | 'tick' | 'tickfast' |
             'heart' | 'thud' | 'door' | 'phone' | 'click' | 'sting' | 'warn' |
-            'water' | 'oar' | 'bell' | 'crumble' | 'splash')
-   SFX.setAmbience('building' | 'river'): tiếng nền ngẫu nhiên (kẽo kẹt nhà cũ hoặc nước vỗ bờ)
+            'water' | 'oar' | 'bell' | 'crumble' | 'splash' |
+            'scale' | 'call' | 'shutter')
+   SFX.setAmbience('building' | 'river' | 'market'): tiếng nền ngẫu nhiên (kẽo kẹt nhà cũ, nước vỗ bờ, hoặc tiếng rao xa trong chợ)
    ========================================================= */
 (function () {
   'use strict';
@@ -65,7 +66,9 @@
     // tiếng nền ngẫu nhiên: kẽo kẹt nhà cũ, hoặc nước vỗ bờ
     setInterval(() => {
       if (!ctx || muted || mood === 'dawn') return;
-      if (ambience === 'river') { if (Math.random() < 0.6) lap(0.05); } else if (Math.random() < 0.35) creak(0.04);
+      if (ambience === 'river') { if (Math.random() < 0.6) lap(0.05); }
+      else if (ambience === 'market') { const r = Math.random(); if (r < 0.2) farCall(0.012); else if (r < 0.4) clink(0.025); else if (r < 0.5) creak(0.03); }
+      else if (Math.random() < 0.35) creak(0.04);
     }, 5000);
   }
   function creak(v) {
@@ -73,6 +76,23 @@
     const o = tone(90 + Math.random() * 60, 0.9, v, 'sawtooth', t, 70 + Math.random() * 40);
     return o;
   }
+
+  // tiếng rao xa: hai, ba âm kéo dài lên xuống như giọng người, lọc qua dải giữa
+  function farCall(v, when) {
+    const t0 = when || ctx.currentTime;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 900; bp.Q.value = 2.5;
+    const g = ctx.createGain(); g.gain.value = 1; bp.connect(g).connect(master);
+    const base = 210 + Math.random() * 40;
+    [[1, 0.55], [1.12, 0.45], [0.94, 0.9]].forEach(([k, d], i) => {
+      const st = t0 + i * 0.62;
+      const o = ctx.createOscillator(); o.type = 'sawtooth';
+      o.frequency.setValueAtTime(base * k, st); o.frequency.linearRampToValueAtTime(base * k * (i === 2 ? 0.88 : 1.04), st + d);
+      const og = ctx.createGain(); og.gain.setValueAtTime(0, st); og.gain.linearRampToValueAtTime(v, st + 0.08); og.gain.linearRampToValueAtTime(v * 0.7, st + d * 0.7); og.gain.linearRampToValueAtTime(0, st + d);
+      o.connect(og).connect(bp); o.start(st); o.stop(st + d + 0.05);
+    });
+  }
+  // tiếng quả cân, khay cân chạm nhau
+  function clink(v) { const t = ctx.currentTime; [2650, 3980, 5300].forEach((f, i) => tone(f, 0.5, v / (i + 1), 'sine', t)); }
 
   function lap(v) {
     const t = ctx.currentTime;
@@ -116,6 +136,9 @@
     oar() { const t = ctx.currentTime; for (let i = 0; i < 3; i++) { const n = noise(0.6, 0.18, 700, 1.2, t + i * 1.2); n.f.frequency.linearRampToValueAtTime(300, n.t + 0.55); tone(180, 0.25, 0.03, 'triangle', t + i * 1.2 + 0.5, 140); } },
     bell() { const t = ctx.currentTime; for (let i = 0; i < 3; i++) { [523, 1290, 2010].forEach((f, j) => tone(f, 2.4, 0.07 / (j + 1), 'sine', t + i * 1.4)); } },
     crumble() { const t = ctx.currentTime; tone(48, 1.6, 0.45, 'sine', t, 30); noise(2.2, 0.45, 260, 0.6, t, 'lowpass'); noise(1.2, 0.3, 900, 0.8, t + 0.9, 'lowpass'); },
+    scale() { const t = ctx.currentTime; clink(0.06); noise(0.25, 0.12, 1800, 4, t + 0.05); tone(320, 0.6, 0.05, 'triangle', t + 0.1, 300); },
+    call() { farCall(0.05); farCall(0.03, ctx.currentTime + 2.4); },
+    shutter() { const t = ctx.currentTime; for (let i = 0; i < 18; i++) noise(0.08, 0.16, 1200 + (i % 3) * 300, 2, t + i * 0.07); tone(80, 1.4, 0.15, 'sawtooth', t, 60); },
     phone() { const t = ctx.currentTime; for (let i = 0; i < 3; i++) { tone(160, 0.35, 0.18, 'square', t + i * 0.6); } }
   };
 

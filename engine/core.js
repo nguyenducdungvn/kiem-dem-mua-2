@@ -383,7 +383,7 @@
     const allClues = new Set(); Object.values(STORY.scenes).forEach((x) => (x.gain && x.gain.clues || []).forEach((c) => allClues.add(c)));
     const got = gotEndings().length;
     $('#scene-time').textContent = sc.time || S.time || ''; $('#scene-time').classList.remove('as-text');
-    const rows = STAT_KEYS.map((k) => `<tr><th>${esc(STATS[k].label)}</th><td>${esc(fmt(k, S[k]))}${STATS[k].show === 'pips' ? '' : '/' + STATS[k].max}</td></tr>`).join('');
+    const rows = STAT_KEYS.map((k) => `<tr><th>${esc(STATS[k].label)}</th><td>${esc(fmt(k, S[k]))}${STATS[k].show === 'pips' || STATS[k].fmt ? '' : '/' + STATS[k].max}</td></tr>`).join('');
     const extra = sc.summary ? sc.summary(S).map(([a, b]) => `<tr><th>${esc(a)}</th><td>${esc(b)}</td></tr>`).join('') : '';
     $('#text').innerHTML = `
       <div class="summary">
@@ -699,7 +699,8 @@
     });
 
     const n = parseInt(new URLSearchParams(location.search).get('tap'), 10);
-    episode = SEASON.episodes.find((e) => e.n === n && e.status === 'open') || null;
+    // 'preview': chưa hiện trên menu mùa, nhưng mở thẳng ?tap=N thì chơi được
+    episode = SEASON.episodes.find((e) => e.n === n && (e.status === 'open' || e.status === 'preview')) || null;
     if (!episode) { document.body.classList.remove('loading'); document.body.classList.add('in-season'); renderSeason(); return; }
 
     // ---- Vào một tập ----

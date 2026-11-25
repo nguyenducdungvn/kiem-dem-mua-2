@@ -1,32 +1,36 @@
-# BÀN GIAO · Kiểm Đếm Ca Đêm · Mùa 2: Phiếu Bàn Giao (v2.0.0, 25/11/2026)
+# BÀN GIAO · Kiểm Đếm Ca Đêm · Mùa 2: Phiếu Bàn Giao (v2.1.0-alpha.1, 25/11/2026)
 
-> Bảo Claude đọc `claude/kiem-dem-mua-2-handoff.md` (bản sao của file này), `claude/kiem-dem-mua-2.md` (kế hoạch mùa) và `claude/quy-tac-tieng-viet.md` trong Project "App GAME", rồi gắn repo `nguyenducdungvn/kiem-dem-mua-2` (ghi) và `nguyenducdungvn/kiem-dem-ca-dem` (đọc, khi cần tham chiếu Mùa 1).
+> Bảo Claude đọc `claude/kiem-dem-mua-2-handoff.md` (bản sao của file này), `claude/kiem-dem-mua-2-tap-2.md` (kế hoạch Tập 2), `claude/kiem-dem-mua-2.md` (kế hoạch mùa) và `claude/quy-tac-tieng-viet.md` trong Project "App GAME", rồi gắn repo `nguyenducdungvn/kiem-dem-mua-2` (ghi) và `nguyenducdungvn/kiem-dem-ca-dem` (đọc, khi cần tham chiếu Mùa 1).
 
 ## 1. Trạng thái
 - **Repo:** https://github.com/nguyenducdungvn/kiem-dem-mua-2 (nhánh `main`). **Tên miền:** https://kiemdem2.hlvsuckhoe.com/ (file `CNAME` có sẵn; tác giả cần bật GitHub Pages, xem mục 6).
 - **Đã xong:** engine dùng chung (mục 2), menu mùa, Mã hồ sơ Mùa 1, **Tập 1 · Bãi Bồi trọn bộ 3 màn** (v2.0.0): 93 cảnh, 8 luật, 28 manh mối, 10 kết thúc (4 kết màn, 6 thất bại, tất cả tới được), 4 mini-game, 5 không gian 3D. `check.js`: 2.927.587 trạng thái, 0 lỗi (có Mã hồ sơ: 3,1 triệu; chế độ đọc truyện: 2,1 triệu; đều 0 lỗi).
 - **Kịch bản và bảng tổng hợp từng màn:** `docs/tap-1/kich-ban-man-1.md`, `kich-ban-man-2.md`, `kich-ban-man-3.md` (có bảng tổng hợp cả tập); toàn văn `kich-ban-tap-1-xuat.md`.
-- **Chưa làm:** Tập 2 · Chợ Sớm (bước tiếp theo, kế hoạch dựng đã chốt ở `docs/tap-2/ke-hoach-tap-2.md`, Project: `claude/kiem-dem-mua-2-tap-2.md`); ảnh OG; Mùa 1 bản 1.2 (Mã hồ sơ, xem `docs/ma-ho-so-mua-1.md`). Tác giả tạo Release `v2.0.0` bằng tay.
+- **Tập 2 · Chợ Sớm, đang dựng (v2.1.0-alpha.1):** xong **Màn 1 · Sổ nợ**: 31 cảnh, 6 luật, 14 manh mối, 4 kết thúc, 1 mini-game, 4 không gian 3D. `check.js tap-2/story-act1.js`: 2.970 trạng thái, 0 lỗi (Mã hồ sơ và đọc truyện cũng 0 lỗi). Tập 2 để `status: 'preview'`: menu mùa vẫn ghi “Sắp ra mắt”, mở thẳng https://kiemdem2.hlvsuckhoe.com/?tap=2 thì chơi được. Kịch bản và bảng tổng hợp: `docs/tap-2/kich-ban-man-1.md`; toàn văn `docs/tap-2/kich-ban-tap-2-xuat.md`.
+- **Bước tiếp theo:** Tập 2 **Màn 2 · Chợ ma** (01:00 – 03:30), file `tap-2/story-act2.js` bọc IIFE, gắn `het_man1.nextScene`, thêm vào `scripts` của Tập 2 trong `config.js`. Xem mục 3b.
+- **Chưa làm:** Tập 2 Màn 2, Màn 3; ảnh OG; Mùa 1 bản 1.2 (Mã hồ sơ, xem `docs/ma-ho-so-mua-1.md`). Tác giả tạo Release `v2.0.0` bằng tay.
 
 ## 2. Cấu trúc file
 | File | Vai trò |
 |---|---|
 | `index.html` | Một trang cho cả mùa. Không có `?tap` → menu mùa (chọn tập, Mã hồ sơ, giới thiệu…). `?tap=1` → nạp script của tập rồi mở menu tập. Mọi hộp thoại dùng chung |
 | `config.js` | Tác giả, cà phê, góp ý, đăng ký; `season`: khóa lưu `kd2`, danh sách tập (`status: 'open' \| 'soon'`, `scripts`), câu tóm tắt Mã hồ sơ |
-| `engine/core.js` | Engine (tách từ `js/engine.js` Mùa 1; v2.0.0 sửa: nút “Sang màn” dùng `proceedTo` để tính hiệu ứng của cảnh mở màn): chỉ số đọc từ `STORY.stats`, HUD dựng động, màn đọc từ `STORY.acts`, sổ đo xuyên mùa `STORY.notebook(S)`, mood `STORY.moodOf`, chia sẻ `STORY.meta.share`, tổng kết màn có `recap(S)` và `summary(S)` |
+| `engine/core.js` | Engine (tách từ `js/engine.js` Mùa 1; v2.0.0 sửa: nút “Sang màn” dùng `proceedTo` để tính hiệu ứng của cảnh mở màn; v2.1.0-alpha.1: tập `status: 'preview'` mở được bằng `?tap=N`, bảng tổng kết không thêm “/max” cho chỉ số có `fmt`): chỉ số đọc từ `STORY.stats`, HUD dựng động, màn đọc từ `STORY.acts`, sổ đo xuyên mùa `STORY.notebook(S)`, mood `STORY.moodOf`, chia sẻ `STORY.meta.share`, tổng kết màn có `recap(S)` và `summary(S)` |
 | `engine/scene3d-kit.js` | Bộ dựng 3D dùng chung (vật liệu, phòng, nhân vật, tablet, đèn pin, vòng lặp). Mỗi tập gọi `Scene3D.register({ views, figures, ambience, torch })` |
-| `engine/audio.js` | Âm thanh WebAudio. Mới: `water oar bell crumble splash`, `SFX.setAmbience('river')` |
-| `engine/icons.js` | Thư viện hình kết thúc. Mới: `tide stake boat lamp tree bell roof bowl pen`. Tập khai báo `STORY.endingIcons` |
+| `engine/audio.js` | Âm thanh WebAudio. Tập 1: `water oar bell crumble splash`, `SFX.setAmbience('river')`. Tập 2: `scale call shutter`, nền `'market'` (tiếng rao xa, tiếng cân) |
+| `engine/icons.js` | Thư viện hình kết thúc. Tập 1: `tide stake boat lamp tree bell roof bowl pen`. Tập 2: `bulb stall ledger tally scale coin`. Tập khai báo `STORY.endingIcons` |
 | `engine/ma-ho-so.js` | Mã hóa/giải mã Mã hồ sơ Mùa 1 (dùng chung cho cả hai mùa) |
 | `tap-1/story-act1.js` | Tập 1 Màn 1: `meta`, `stats`, `acts`, `rules` R1–R5, `notebook`, `scenes`, `endingsList`, `staging`, `STORY.areaOf` |
 | `tap-1/story-act2.js` | Màn 2 (IIFE): R6–R8, `t1_m2_*`, mini-game sào `t1_m2_p3`, `het_man2`, kết thúc `t1_bua_com`. Gắn `het_man1.nextScene` |
 | `tap-1/story-act3.js` | Màn 3 (IIFE): `t1_m3_*`, mini-game đối chiếu `t1_m3_p4`, `het_man3` (`final: true`), 2 kết cuối, `STORY.honesty1(S)` (0–6), ghi đè `STORY.notebook` (trang Cồn Lở) |
 | `tap-1/scene.js` | Không gian `ben`, `song`, `truong`, `tram`, `nha` (trong ngôi nhà giữa sông); nhân vật `tu, sau, lanh, quy` |
+| `tap-2/story-act1.js` | Tập 2 Màn 1, **cả file bọc IIFE** (khác Tập 1): `meta`, `stats` (Sổ nợ `SN`), `acts`, `rules` L1–L4, L6, L7, `notebook` (trang Cồn Lở mở nếu `kd2_endings` có kết cuối Tập 1), `scenes` `t2_*`, mini-game `t2_p1`, `endingsList`, `staging`. Hằng dùng chung cho màn sau: `STORY.T2 = { SANS, NUM, PURPLE, PAPER, TAB, t1End, signed }` |
+| `tap-2/scene.js` | Không gian `trungtam`, `nhalong` (24 bóng đèn tắt dần theo Sổ nợ; fx `ghostlamps`, `che`, `purple`, `blackout`), `sap47` (fx `lamp`, `soft`, `swing`, `lamp_relight`, `owner`), `bql` (fx `fan`); nhân vật `hai, toan, mi, hue` |
 | `tools/check.js` | `node tools/check.js tap-1/story-act1.js tap-1/story-act2.js tap-1/story-act3.js [--profile=m1_ghi_su_that,…] [--story] [--strict]`. Chỉ tách trạng thái theo cờ tạo nhánh (tự dò trong `cond`, `next` dạng hàm, `endOf`) |
 | `tools/export.js` | `node tools/export.js <3 file story> > docs/tap-1/kich-ban-tap-1-xuat.md` |
 | `docs/` | `MUA-2.md` (kế hoạch mùa), `tap-1/kich-ban-man-1..3.md` (Bước A/B/C, sơ đồ nhánh, bảng tổng hợp), `ma-ho-so-mua-1.md`, file này |
 
-**Khóa lưu trình duyệt:** `kd2_endings` (chung cả mùa), `kd2_settings`, `kd2_profile`, `kd2_progress`, `kd2_mute`; theo tập: `kd2_t1_save`, `kd2_t1_chapters`. Id kết thúc có tiền tố `t1_`.
+**Khóa lưu trình duyệt:** `kd2_endings` (chung cả mùa), `kd2_settings`, `kd2_profile`, `kd2_progress`, `kd2_mute`; theo tập: `kd2_t1_save`, `kd2_t1_chapters`, `kd2_t2_save`, `kd2_t2_chapters`. Id kết thúc có tiền tố `t1_`, `t2_`.
 
 **Thêm màn cho một tập:** làm như `tap-1/story-act2.js` (IIFE, `Object.assign(STORY.scenes, …)`, `STORY.endingsList.push(…)`, `Object.assign(STORY.staging, …)`, gắn `nextScene` của màn trước, bỏ `soon` trong `STORY.acts`, thêm file vào `scripts` trong `config.js`). Màn cuối: `final: true`, `endOf(S)` chọn kết cuối. **Lưu ý:** `story-act1.js` khai báo hằng toàn cục `PAPER_DEFS, SANS, NUM, TIDE, SVG_P1, SVG_P2, AREA_DAY, areaOf, TAB`; file sau luôn bọc IIFE. Nút không đồng hồ thì bỏ `timer`; lựa chọn có hai phiên bản theo điều kiện thì dùng hai mục cùng `key` với `cond` ngược nhau (đừng dùng `next` dạng hàm phụ thuộc cờ, `check.js` không dò được hết).
 
@@ -45,6 +49,16 @@
 - **Kết cuối:** `ky_that` → *Bàn giao một nơi chốn* (bà Tư ký nếu có `chung_cu`, `cho_ba_xem` hoặc Tin cậy ≥ 70; trao mái chèo cho cô Lành) · `ky_muc_tim` hoặc `bo_trong` → *Người giữ sổ* (ngôi nhà vẫn đứng giữa ban ngày, bà Tư ở lại).
 - **Gợi ý mở Tập 2 · Chợ Sớm:** một cảnh ngắn ở Trung tâm, Thục Anh nhận hồ sơ chợ có một dòng mực tím trong sổ nợ (đã nhắc ở teaser cuối Tập 1). Có thể đọc `kd2_endings` (`t1_ket_ban_giao` / `t1_ket_muc_tim`) để đổi câu thoại, vì chung tên miền.
 
+## 3b. Kinh thánh Tập 2 · Chợ Sớm (đang dựng, kế hoạch: `docs/tap-2/ke-hoach-tap-2.md`)
+- **Bối cảnh:** chợ Sớm, thị trấn Phú Cầu, ba tuần sau Cồn Lở. 186 lô trên sơ đồ 1998; mỗi hộ hỗ trợ 30 triệu; chủ đầu tư Hiển xuống lúc 4 giờ.
+- **Chỉ số riêng Sổ nợ** `SN` −10…+10, bắt đầu 0, thua ở −6 (kết thúc *Giữ lại chợ*, dùng chung với Độ neo ≥ 60), đọc truyện chặn ở −5. Thanh có vạch số 0. Trong 3D: mỗi nấc âm tắt 2 trong 24 bóng đèn nhà lồng, từ cuối chợ vào.
+- **Con số Màn 1:** sổ thu phí 186 dòng = 182 dòng đơn + dòng ghép 93–94 (chị em bà Lựu, bà Huệ) + 3 lô mực tím 187 cân thuê, 188 chè đậu trắng, 189 đèn dầu (ký nhận: Người giữ sổ). Ô 120–121 dỡ làm lối thoát hiểm năm 2005. **Đúng: 184 hộ.** Bỏ trống ô tổng thì tự hiện 189 mực tím.
+- **Sạp 47:** đứng tên bà Lan (mẹ Mi, mất tháng 3/2019, đêm cuối hứa qua điện thoại “Sáng mai trả đủ”). Đèn tự sáng từ 2019, Mi chưa bật lần nào. Mi vẫn đóng phí đều. Mẹ Mi nợ bà Hai 4 triệu (mực xanh, có thật). Bản chụp sổ nợ có dòng mực tím “Sạp 47 · nợ một lời hứa · đã ký nhận thay. Người giữ sổ”, đề giờ ký 06:00 sáng mai, **chưa có** trong sổ thật.
+- **Luật đã dùng:** L1 (vé 1955, 1990, bà Hai), L2 (vé 1990, cột dãy E), L3 (vé 2008, lời mẹ Mi dặn), L4 (vé 1975 đóng khung ở phòng ban quản lý), L6 (bìa trong sổ nợ), L7 (mực tím, chỉ hiện khi khuyên bà Hai xóa nợ). Còn L5 (Màn 2), L8 (Màn 3).
+- **Cờ Màn 1:** `chep_muc_tim` (tạo nhánh: mở lựa chọn C ở cảnh bà Hai), `ghi_47_that, tat_den_47, hoi_me_mi, mi_ve, ghe_day_cuoi, nhan_lo_ma, doi_chieu_dung, ghep_93, toan_bao_khop, khuyen_xoa_no, thay_gio_ky, ky_so_that, ky_so_khop, bo_trong_1, toan_ky_thay`.
+- **Kết thúc đã có:** `t2_ket_man1` (Kết Màn 1: Đèn sạp 47), `t2_sap_trong`, `t2_giu_lai_cho`, `t2_dem_mai` (Tỉnh táo, dành cho Màn 2). Còn phải thêm: Kết Màn 2, *Tiền thối*, *Nợ lời hứa*, *Chợ sập*, 2 kết cuối (tổng 10).
+- **Gợi ý Màn 2 (từ bảng tổng hợp Màn 1):** mở bằng nhịp thở 01:00 (Mi mang cà phê vào, SN +1); ba lô mực tím mở hàng lúc 3 giờ (cân thuê → mini-game cân điêu, chè đậu trắng → Nút 2 tiền thối L5, đèn dầu); Sổ nợ dương cần một dấu hiệu riêng (người bán chợ ma lùi lại); đáp án mini-game cân: cái cân “đúng tới từng gram” khi không ai đứng bán là cái sai.
+
 ## 4. Quy trình mỗi màn (bắt buộc)
 1. **Bước A:** rút 1 bài học về nhịp độ hoặc độ khó từ màn trước.
 2. **Bước B:** tích hợp ý tưởng của người dùng, nối khớp manh mối cũ.
@@ -56,7 +70,8 @@
 - **Độc bản:** danh sách cấm của Mùa 1, cộng: không lặp twist Mùa 1 (căn hộ không có trong bản vẽ, livestream là hồ sơ công khai, đồ đạc tự về chỗ cũ), không bốc mộ hay quy tập mộ.
 - **Thiết kế:** vào nút đầu sau tối đa 2 cảnh; phương án chết là phương án hấp dẫn hoặc tử tế nhất, có luật báo trước; đồng hồ chỉ ở nút hành động; khoảnh khắc nhân vật rải giữa các nút; 8–10 kết thúc mỗi tập.
 - **Lỗi đã sửa, giữ làm mặc định:** `[hidden]{display:none!important}`; typeParagraphs có token; đồng hồ có guard; pixel ratio thấp trên điện thoại; mái tôn: `rotation.x` âm cho nửa mái phía bắc.
-- **Phát hành:** phiên Claude không tạo được Release, không đẩy được tag. Tác giả tạo Release bằng tay: `v2.0.0` cho Tập 1 trọn bộ (đã đủ điều kiện), `v2.1.0` cho Tập 2.
+- **Phát hành:** phiên Claude không tạo được Release, không đẩy được tag. Tác giả tạo Release bằng tay: `v2.0.0` cho Tập 1 trọn bộ (đã đủ điều kiện), `v2.1.0` cho Tập 2 (khi đủ 3 màn và đổi `status: 'open'`).
+- **Chụp màn hình:** Python Playwright + `/usr/bin/google-chrome` chạy được WebGL mặc định (không cần cờ thêm), máy chủ `python3 -m http.server`, gọi `KD.restart()` rồi `KD.go(id)` để nhảy cảnh, đặt `KD.getState().SN` để thử đèn.
 - **Thiết kế (thêm từ Tập 1):** mở màn mới bằng một nhịp thở (giảm chỉ số riêng); nút quyết định cuối không có đồng hồ; bỏ trống cũng là một lựa chọn có hậu quả; dùng lại kết thúc cũ khi cùng một luật, để giữ 8–10 kết thúc.
 
 ## 6. Việc tác giả cần làm sau lần đẩy đầu tiên
